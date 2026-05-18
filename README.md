@@ -4,8 +4,7 @@ Aplicação fullstack de gestão financeira pessoal, com integração a bancos v
 
 ## O que é
 
-Sistema para acompanhar e organizar suas finanças pessoais: contas bancárias, cartões de crédito, transações, poupanças e gastos recorrentes — tudo em um único lugar. A integração com a Pluggy permite importar automaticamente transações reais das suas contas bancárias via Open Finance.
-
+Sistema para acompanhar e organizar suas finanças pessoais: contas bancárias, cartões de crédito, transações, poupanças e gastos recorrentes — tudo em um único lugar.
 ## Funcionalidades
 
 - **Dashboard** — visão geral do saldo, gastos e capacidade de gasto
