@@ -1,0 +1,31 @@
+# Frontend
+front/node_modules/
+front/dist/
+front/.env
+front/.env.local
+front/.env.*.local
+
+# Backend
+back/target/
+back/data/
+back/.env
+back/*.env
+back/src/main/resources/application-local.properties
+back/src/main/resources/application-prod.properties
+
+# Claude Code (configurações locais)
+.claude/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.suo
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

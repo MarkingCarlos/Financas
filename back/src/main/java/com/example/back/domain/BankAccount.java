@@ -1,0 +1,58 @@
+package com.example.back.domain;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Entity
+@Table(name = "contas_bancarias")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class BankAccount {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @Column(name = "usuario_id", nullable = false)
+    private String userId;
+
+    @Column(name = "nome", nullable = false)
+    private String name;
+
+    @Column(name = "numero_conta")
+    private String accountNumber;
+
+    @Column(name = "saldo", nullable = false, precision = 15, scale = 2)
+    @Builder.Default
+    private BigDecimal balance = BigDecimal.ZERO;
+
+    @Column(name = "tipo_conta", nullable = false)
+    private String accountType;
+
+    @Column(name = "pluggy_conta_id")
+    private String pluggyAccountId;
+
+    @Column(name = "pluggy_item_id")
+    private String pluggyItemId;
+
+    @CreationTimestamp
+    @Column(name = "criado_em", updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "atualizado_em")
+    private LocalDateTime updatedAt;
+
+    public enum AccountType {
+        CHECKING, SAVINGS, INVESTMENT
+    }
+}
