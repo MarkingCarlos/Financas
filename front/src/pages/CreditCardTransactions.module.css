@@ -1,0 +1,209 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 150ms;
+  width: fit-content;
+}
+.backButton:hover { color: #111827; }
+
+.cardHeader {
+  border-radius: 1rem;
+  padding: 1.5rem 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #fff;
+}
+
+.cardHeaderIcon {
+  background: rgba(255,255,255,0.2);
+  border-radius: 0.75rem;
+  padding: 0.625rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardHeaderName {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.cardHeaderBank {
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.8);
+  margin-top: 0.125rem;
+}
+
+.cardHeaderDigits {
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.05em;
+  margin-top: 0.125rem;
+}
+
+.loadingBox {
+  padding: 2.5rem;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+/* ── Bill sections ─────────────────────────────────── */
+.billList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.billSection {
+  background: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+  overflow: hidden;
+}
+
+.billHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: background 150ms;
+  gap: 1rem;
+}
+.billHeader:hover { background: #f9fafb; }
+
+.billHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.billHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.billMonth {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #111827;
+  text-transform: capitalize;
+}
+
+.billStatusBadge {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.billTxCount {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.billTotal {
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.chevron {
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.billBody {
+  border-top: 1px solid #f3f4f6;
+}
+
+.billEmpty {
+  padding: 1.25rem 1.5rem;
+  font-size: 0.875rem;
+  color: #9ca3af;
+  text-align: center;
+}
+
+/* ── Transaction rows ──────────────────────────────── */
+.txRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  gap: 1rem;
+  border-bottom: 1px solid #f9fafb;
+  transition: background 150ms;
+}
+.txRow:last-child { border-bottom: none; }
+.txRow:hover { background: #fafafa; }
+
+.txLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.txTypeDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.txDesc {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.txMeta {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.125rem;
+}
+
+.txAmountExpense {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #ef4444;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.txAmountIncome {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #16a34a;
+  white-space: nowrap;
+  flex-shrink: 0;
+}

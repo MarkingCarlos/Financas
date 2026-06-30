@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { pluggyService } from '../services/pluggyService'
 import ConfirmDialog from '../components/ui/ConfirmDialog'
 import { RefreshCw, Trash2, Link2, CheckCircle, AlertCircle, Loader } from 'lucide-react'
+import styles from './Integrations.module.css'
 
 function StatusBadge({ status }) {
   const map = {
@@ -13,7 +14,7 @@ function StatusBadge({ status }) {
   const cfg = map[status] ?? map.DISCONNECTED
   const Icon = cfg.icon
   return (
-    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${cfg.color}`}>
+    <span className={`${styles.statusBadge} ${cfg.color}`}>
       <Icon size={11} /> {cfg.label}
     </span>
   )
@@ -34,7 +35,6 @@ export default function Integrations() {
     try {
       const { connectToken } = await pluggyService.getConnectToken()
 
-      // Carrega o SDK da Pluggy dinamicamente
       if (!window.PluggyConnect) {
         await new Promise((resolve, reject) => {
           const script = document.createElement('script')
@@ -73,11 +73,11 @@ export default function Integrations() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
+    <div className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Integrações Open Finance</h1>
-          <p className="text-sm text-gray-500 mt-1">Conecte suas contas bancárias automaticamente via Pluggy.</p>
+          <h1 className={styles.pageTitle}>Integrações Open Finance</h1>
+          <p className={styles.pageSubtitle}>Conecte suas contas bancárias automaticamente via Pluggy.</p>
         </div>
         <button onClick={handleConnect} disabled={connectLoading} className="btn-primary shrink-0">
           <Link2 size={16} /> {connectLoading ? 'Abrindo...' : 'Conectar banco'}
@@ -85,35 +85,35 @@ export default function Integrations() {
       </div>
 
       {connections.length === 0 ? (
-        <div className="card p-10 text-center">
-          <Link2 size={40} className="mx-auto text-gray-300 mb-3" />
-          <p className="text-gray-500 font-medium">Nenhuma integração ativa</p>
-          <p className="text-sm text-gray-400 mt-1">Clique em "Conectar banco" para importar seus dados automaticamente.</p>
+        <div className={styles.emptyState}>
+          <Link2 size={40} className={styles.emptyStateIcon} />
+          <p className={styles.emptyStateTitle}>Nenhuma integração ativa</p>
+          <p className={styles.emptyStateSubtitle}>Clique em "Conectar banco" para importar seus dados automaticamente.</p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className={styles.connectionList}>
           {connections.map(conn => (
-            <div key={conn.id} className="card p-4 flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <p className="font-semibold text-gray-900">{conn.connectorName ?? conn.itemId}</p>
-                <div className="flex flex-wrap items-center gap-3 mt-1">
+            <div key={conn.id} className={styles.connectionCard}>
+              <div className={styles.connectionInfo}>
+                <p className={styles.connectionName}>{conn.connectorName ?? conn.itemId}</p>
+                <div className={styles.connectionMeta}>
                   <StatusBadge status={conn.status} />
                   {conn.lastSyncAt && (
-                    <span className="text-xs text-gray-400">
+                    <span className={styles.lastSyncText}>
                       Última sync: {new Date(conn.lastSyncAt).toLocaleString('pt-BR')}
                     </span>
                   )}
                 </div>
               </div>
-              <div className="flex gap-2 shrink-0">
+              <div className={styles.connectionActions}>
                 <button
                   onClick={() => handleSync(conn.id)}
                   disabled={loadingSync === conn.id}
-                  className="btn-secondary text-sm px-3 py-1.5">
+                  className={styles.syncButton}>
                   <RefreshCw size={14} className={loadingSync === conn.id ? 'animate-spin' : ''} />
                   Sincronizar
                 </button>
-                <button onClick={() => setDeleteModal(conn)} className="btn-danger text-sm px-3 py-1.5">
+                <button onClick={() => setDeleteModal(conn)} className={styles.disconnectButton}>
                   <Trash2 size={14} /> Desconectar
                 </button>
               </div>

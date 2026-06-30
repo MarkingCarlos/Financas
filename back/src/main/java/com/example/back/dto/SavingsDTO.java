@@ -15,7 +15,8 @@ public class SavingsDTO {
             @NotBlank String name,
             BigDecimal amount,
             String color,
-            String icon
+            String icon,
+            Boolean available
     ) {}
 
     public record TransferRequest(
@@ -29,12 +30,13 @@ public class SavingsDTO {
             BigDecimal amount,
             String color,
             String icon,
+            boolean available,
             LocalDateTime createdAt,
             LocalDateTime updatedAt
     ) {
         public static Response from(Savings s) {
             return new Response(s.getId(), s.getName(), s.getAmount(),
-                    s.getColor(), s.getIcon(), s.getCreatedAt(), s.getUpdatedAt());
+                    s.getColor(), s.getIcon(), s.isAvailable(), s.getCreatedAt(), s.getUpdatedAt());
         }
     }
 }

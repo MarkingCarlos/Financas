@@ -2,29 +2,29 @@ import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import { Menu } from 'lucide-react'
+import styles from './Layout.module.css'
 
 export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div className="flex min-h-screen">
+    <div className={styles.root}>
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Header mobile — oculto em desktop */}
-        <header className="lg:hidden sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3 shrink-0">
+      <div className={styles.contentArea}>
+        <header className={styles.mobileHeader}>
           <button
             onClick={() => setSidebarOpen(true)}
-            className="p-1 text-gray-600 hover:text-gray-900 transition-colors"
+            className={styles.menuToggle}
             aria-label="Abrir menu"
           >
             <Menu size={22} />
           </button>
-          <span className="text-lg font-bold text-blue-600">Finanças</span>
+          <span className={styles.brandLabel}>Finanças</span>
         </header>
 
-        <main className="flex-1 overflow-auto">
-          <div className="max-w-7xl mx-auto p-4 sm:p-6">
+        <main className={styles.mainContent}>
+          <div className={styles.contentWrapper}>
             <Outlet />
           </div>
         </main>

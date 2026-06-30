@@ -41,17 +41,14 @@ public class CreditCard {
     @Builder.Default
     private BigDecimal currentBalance = BigDecimal.ZERO;
 
-    @Column(name = "dia_fechamento", nullable = false)
-    private Integer closingDay;
-
-    @Column(name = "dia_vencimento", nullable = false)
-    private Integer dueDay;
-
     @Column(name = "pluggy_conta_id")
     private String pluggyAccountId;
 
     @Column(name = "pluggy_item_id")
     private String pluggyItemId;
+
+    @Column(name = "cor", length = 7)
+    private String color;
 
     @CreationTimestamp
     @Column(name = "criado_em", updatable = false)

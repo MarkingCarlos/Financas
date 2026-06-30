@@ -1,0 +1,480 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pageHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem 1rem;
+}
+@media (min-width: 640px) {
+  .summaryGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.summaryCard {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  padding: 1.25rem;
+}
+
+.summaryCardTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.summaryLabel {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.summaryIconWaiting {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: #3b82f6;
+}
+
+.summaryIconSaved {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: #10b981;
+}
+
+.summaryAmount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.summaryAmountSaved {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #047857;
+}
+
+.summaryNote {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.25rem;
+}
+
+.emptyState {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  padding: 2.5rem;
+  text-align: center;
+}
+
+.emptyStateIcon {
+  margin: 0 auto;
+  color: #d1d5db;
+  margin-bottom: 0.75rem;
+}
+
+.emptyStateTitle {
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.emptyStateSubtitle {
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.wishGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 640px) {
+  .wishGrid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .wishGrid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.wishCard {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.wishCardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.wishCardTitleGroup {
+  min-width: 0;
+}
+
+.wishItemName {
+  font-weight: 600;
+  color: #111827;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wishItemAmount {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #374151;
+}
+
+.wishStatusBadge {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid;
+  flex-shrink: 0;
+}
+
+.wishNotes {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.waitProgressHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.waitProgressLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.penaltyText {
+  color: #ef4444;
+}
+
+.progressTrack {
+  height: 0.5rem;
+  background-color: #f3f4f6;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: #3b82f6;
+  border-radius: 9999px;
+  transition: width 300ms;
+}
+
+.reactivateNote {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.purchasedNote {
+  font-size: 0.75rem;
+  color: #059669;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.wishActions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.releaseButton {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  background-color: #059669;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 150ms;
+}
+.releaseButton:hover { background-color: #047857; }
+
+.earlyBuyButton {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  background: none;
+  cursor: pointer;
+  transition: background-color 150ms;
+}
+.earlyBuyButton:hover { background-color: #fef2f2; }
+
+.giveUpButton {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid #d1d5db;
+  color: #4b5563;
+  background: none;
+  cursor: pointer;
+  transition: background-color 150ms;
+}
+.giveUpButton:hover { background-color: #f9fafb; }
+
+.reactivateButton {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid #bfdbfe;
+  color: #2563eb;
+  background: none;
+  cursor: pointer;
+  transition: background-color 150ms;
+}
+.reactivateButton:hover { background-color: #eff6ff; }
+.reactivateButton:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.deleteButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid #d1d5db;
+  color: #6b7280;
+  background: none;
+  cursor: pointer;
+  transition: color 150ms, background-color 150ms;
+}
+.deleteButton:hover { background-color: #fef2f2; color: #dc2626; }
+
+.deleteButtonRight {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid #d1d5db;
+  color: #6b7280;
+  background: none;
+  cursor: pointer;
+  margin-left: auto;
+  transition: color 150ms, background-color 150ms;
+}
+.deleteButtonRight:hover { background-color: #fef2f2; color: #dc2626; }
+
+.earlyWarning {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 0.5rem;
+}
+
+.earlyWarningText {
+  font-size: 0.75rem;
+  color: #b91c1c;
+}
+
+.questionButtons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.expenseListScroll {
+  max-height: 16rem;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+}
+.expenseListScroll > * + * {
+  border-top: 1px solid #f3f4f6;
+}
+
+.expenseListLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  cursor: pointer;
+  transition: background-color 150ms;
+}
+
+.expenseListLabelSelected {
+  background-color: #eff6ff;
+}
+
+.expenseListLabelDefault:hover {
+  background-color: #f9fafb;
+}
+
+.expenseLabelContent {
+  min-width: 0;
+}
+
+.expenseLabelName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1f2937;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.expenseLabelMeta {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.expenseLabelAmount {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #dc2626;
+  flex-shrink: 0;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.paymentTypeRow {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.paymentTypeButtonAccount {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid;
+  cursor: pointer;
+  transition: color 150ms, background-color 150ms, border-color 150ms;
+}
+
+.paymentTypeButtonAccountActive {
+  background-color: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+
+.paymentTypeButtonAccountInactive {
+  background-color: #fff;
+  color: #4b5563;
+  border-color: #d1d5db;
+}
+.paymentTypeButtonAccountInactive:hover { background-color: #f9fafb; }
+
+.paymentTypeButtonCard {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid;
+  cursor: pointer;
+  transition: color 150ms, background-color 150ms, border-color 150ms;
+}
+
+.paymentTypeButtonCardActive {
+  background-color: #9333ea;
+  color: #fff;
+  border-color: #9333ea;
+}
+
+.paymentTypeButtonCardInactive {
+  background-color: #fff;
+  color: #4b5563;
+  border-color: #d1d5db;
+}
+.paymentTypeButtonCardInactive:hover { background-color: #f9fafb; }
+
+.waitHint {
+  font-size: 0.75rem;
+  color: #2563eb;
+  margin-top: 0.375rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.twoColGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.formSpaceY {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

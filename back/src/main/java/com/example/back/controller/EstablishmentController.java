@@ -21,17 +21,8 @@ public class EstablishmentController extends BaseController {
     private final EstablishmentService service;
     private final UserService userService;
 
-    /**
-     * Retrieves or generates a unique identifier (UUID) for the user associated with the provided JWT.
-     *
-     * @param jwt the JSON Web Token containing user details. If null, a default user identifier is used.
-     * @return the UUID of the user, either pre-existing or newly created.
-     */
     private UUID uid(Jwt jwt) {
-        String googleId = userId(jwt);
-        String name = jwt != null ? jwt.getClaim("name") : "Dev User";
-        String email = jwt != null ? jwt.getClaim("email") : null;
-        return userService.findOrCreate(googleId, name, email).getId();
+        return userService.resolveId(userId(jwt));
     }
 
     @GetMapping

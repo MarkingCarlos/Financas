@@ -1,0 +1,108 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.tableWrapper {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  font-size: 0.875rem;
+}
+
+.tableHead {
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tableHeadCell {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.tableBody > * + * {
+  border-top: 1px solid #f3f4f6;
+}
+
+.tableRow:hover {
+  background-color: #f9fafb;
+}
+
+.tableEmptyRow {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: #9ca3af;
+}
+
+.tableCellName {
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  color: #111827;
+}
+
+.tableCellCategory {
+  padding: 0.75rem 1rem;
+}
+
+.categoryChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.categoryEmpty {
+  color: #9ca3af;
+}
+
+.tableCellActions {
+  padding: 0.75rem 1rem;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.editButton {
+  color: #9ca3af;
+  transition: color 150ms;
+}
+.editButton:hover { color: #2563eb; }
+
+.deleteButton {
+  color: #9ca3af;
+  transition: color 150ms;
+}
+.deleteButton:hover { color: #ef4444; }
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}

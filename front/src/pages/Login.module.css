@@ -1,0 +1,229 @@
+.pageWrapper {
+  min-height: 100vh;
+  background-color: #f9fafb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 3rem 1rem;
+}
+
+.brandSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logoContainer {
+  padding: 1rem;
+  border-radius: 1rem;
+  background-color: #2563eb;
+  transition: all 500ms;
+}
+
+.logoContainerFocused {
+  background: linear-gradient(to bottom right, #3b82f6, #1d4ed8);
+  box-shadow: 0 10px 15px -3px rgb(59 130 246 / 0.3);
+}
+
+.appTitle {
+  font-size: 1.875rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: #111827;
+}
+
+.appSubtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  border: 1px solid #e5e7eb;
+  width: 100%;
+  max-width: 24rem;
+  overflow: hidden;
+}
+
+.tabsRow {
+  display: flex;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tabButton {
+  flex: 1;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 150ms, background-color 150ms;
+  border: none;
+  cursor: pointer;
+}
+
+.tabButtonActive {
+  color: #2563eb;
+  border-bottom: 2px solid #2563eb;
+  background-color: #fff;
+}
+
+.tabButtonInactive {
+  color: #6b7280;
+  background-color: #f9fafb;
+}
+.tabButtonInactive:hover { color: #374151; }
+
+.cardBody {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.alertSuccess {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  background-color: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #047857;
+  border-radius: 0.75rem;
+  padding: 0.75rem 0.875rem;
+  font-size: 0.875rem;
+}
+
+.alertError {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  border-radius: 0.75rem;
+  padding: 0.75rem 0.875rem;
+  font-size: 0.875rem;
+}
+
+.alertIcon {
+  margin-top: 0.125rem;
+  flex-shrink: 0;
+}
+
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.fieldLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.authInput {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid;
+  font-size: 0.875rem;
+  color: #111827;
+  outline: none;
+  transition: all 150ms;
+  box-sizing: border-box;
+}
+.authInput::placeholder { color: #9ca3af; }
+
+.authInputDefault {
+  border-color: #e5e7eb;
+}
+.authInputDefault:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgb(59 130 246 / 0.15);
+}
+
+.authInputError {
+  border-color: #f87171;
+  box-shadow: 0 0 0 3px #fee2e2;
+}
+
+.passwordWrapper {
+  position: relative;
+}
+
+.authInputWithIcon {
+  padding-right: 2.5rem;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  transition: color 150ms;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+.passwordToggle:hover { color: #4b5563; }
+
+.submitButton {
+  width: 100%;
+  background-color: #2563eb;
+  color: #fff;
+  padding: 0.625rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 150ms;
+  margin-top: 0.25rem;
+  border: none;
+  cursor: pointer;
+}
+.submitButton:hover { background-color: #1d4ed8; }
+.submitButton:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dividerLine {
+  flex: 1;
+  height: 1px;
+  background-color: #e5e7eb;
+}
+
+.dividerText {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  user-select: none;
+}
+
+.googleWrapper {
+  transition: opacity 150ms;
+}
+
+.googleWrapperDisabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.footerNote {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  text-align: center;
+}

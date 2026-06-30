@@ -1,0 +1,301 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pageHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.emptyState {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  padding: 2.5rem;
+  text-align: center;
+  color: #9ca3af;
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 640px) {
+  .cardsGrid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .cardsGrid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.creditCard {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: box-shadow 150ms, transform 150ms;
+}
+.creditCard:hover {
+  box-shadow: 0 4px 12px 0 rgb(0 0 0 / 0.12);
+  transform: translateY(-1px);
+}
+
+.cardColorHeader {
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+}
+.cardColorHeader:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: -2px;
+}
+
+.cardBody {
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cardTopRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.cardName {
+  font-weight: 600;
+  color: #111827;
+}
+
+.cardBankName {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.cardActionButtons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.editButton {
+  color: #9ca3af;
+  transition: color 150ms;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.editButton:hover { color: #2563eb; }
+
+.deleteButton {
+  color: #9ca3af;
+  transition: color 150ms;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.deleteButton:hover { color: #ef4444; }
+
+.editButtonWhite {
+  color: rgba(255,255,255,0.7);
+  transition: color 150ms;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.editButtonWhite:hover { color: #fff; }
+
+.deleteButtonWhite {
+  color: rgba(255,255,255,0.7);
+  transition: color 150ms;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.deleteButtonWhite:hover { color: #fecaca; }
+
+.colorPickerRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.375rem;
+}
+
+.colorSwatch {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 150ms;
+  padding: 0;
+}
+.colorSwatch:hover { transform: scale(1.15); }
+
+.colorCustomInput {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  border: 2px solid #e5e7eb;
+  padding: 0;
+  cursor: pointer;
+  background: none;
+  overflow: hidden;
+}
+
+.closedBillAlert {
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.closedBillHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.closedBillLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #b45309;
+}
+
+.closedBillBadge {
+  font-size: 0.75rem;
+  background-color: #fde68a;
+  color: #92400e;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+}
+
+.closedBillAmount {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #dc2626;
+}
+
+.payBillButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.375rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 150ms;
+}
+.payBillButton:hover { background-color: #1d4ed8; }
+
+.openBillLabel {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.openBillAmount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #dc2626;
+}
+
+.creditLimitText {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.noBillText {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.syncedBadge {
+  font-size: 0.75rem;
+  color: #3b82f6;
+}
+
+.closeBillButtonWrapper {
+  padding-top: 0.25rem;
+}
+
+.closeBillButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background-color: #fff;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
+  transition: background-color 150ms;
+}
+.closeBillButton:hover { background-color: #f9fafb; }
+
+.payBillInfoAlert {
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.payBillInfoText {
+  color: #b45309;
+}
+
+.payBillTotalAmount {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #dc2626;
+  margin-top: 0.25rem;
+}
+
+.insufficientWarning {
+  font-size: 0.75rem;
+  color: #ef4444;
+  margin-top: 0.25rem;
+}
+
+.billMonthGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}

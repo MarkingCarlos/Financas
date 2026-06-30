@@ -1,0 +1,206 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pageHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.pageTitleGroup {}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.pageSubtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 0.125rem;
+}
+
+.totalHighlight {
+  font-weight: 600;
+  color: #dc2626;
+}
+
+.emptyState {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  padding: 2.5rem;
+  text-align: center;
+  color: #9ca3af;
+}
+
+.emptyStateIcon {
+  margin: 0 auto;
+  margin-bottom: 0.75rem;
+  opacity: 0.3;
+}
+
+.emptyStateSubtext {
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.monthList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.monthCard {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  overflow: hidden;
+}
+
+.monthHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 150ms;
+}
+.monthHeader:hover { background-color: #f9fafb; }
+
+.monthHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.monthChevron {
+  color: #9ca3af;
+}
+
+.monthName {
+  font-weight: 600;
+  color: #111827;
+  text-transform: capitalize;
+}
+
+.monthTransactionCount {
+  font-size: 0.75rem;
+  background-color: #f3f4f6;
+  color: #6b7280;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+}
+
+.monthTotal {
+  font-weight: 700;
+  color: #dc2626;
+  font-size: 1.125rem;
+}
+
+.transactionList {
+  border-top: 1px solid #f3f4f6;
+}
+.transactionList > * + * {
+  border-top: 1px solid #f9fafb;
+}
+
+.transactionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  transition: background-color 150ms;
+}
+.transactionRow:hover { background-color: #f9fafb; }
+
+.transactionLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.categoryDot {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+
+.transactionDetails {
+  min-width: 0;
+}
+
+.transactionNameRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.transactionName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1f2937;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.transactionMeta {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.transactionRight {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: 0.75rem;
+  flex-shrink: 0;
+}
+
+.transactionAmount {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #dc2626;
+}
+
+.cancelGroupButton {
+  color: #d1d5db;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 150ms;
+}
+.cancelGroupButton:hover { color: #ef4444; }
+.cancelGroupButton:disabled { opacity: 0.5; }
+
+.badgeSubscription {
+  font-size: 0.75rem;
+  background-color: #f3e8ff;
+  color: #7e22ce;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+}
+
+.badgeInstallment {
+  font-size: 0.75rem;
+  background-color: #dbeafe;
+  color: #1d4ed8;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+}

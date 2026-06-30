@@ -4,6 +4,7 @@ import Modal from '../components/ui/Modal'
 import ConfirmDialog from '../components/ui/ConfirmDialog'
 import { Plus, Pencil, Trash2 } from 'lucide-react'
 import { useBalanceVisibility } from '../context/BalanceVisibilityContext'
+import styles from './Accounts.module.css'
 
 const ACCOUNT_TYPES = [
   { value: 'Corrente', label: 'Conta Corrente' },
@@ -35,7 +36,7 @@ function AccountForm({ initial, onSubmit, onCancel, loading }) {
           {ACCOUNT_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
         </select>
       </div>
-      <div className="flex justify-end gap-3 pt-2">
+      <div className={styles.formActions}>
         <button type="button" onClick={onCancel} className="btn-secondary">Cancelar</button>
         <button type="submit" disabled={loading} className="btn-primary">
           {loading ? 'Salvando...' : 'Salvar'}
@@ -47,7 +48,7 @@ function AccountForm({ initial, onSubmit, onCancel, loading }) {
 
 export default function Accounts() {
   const [accounts, setAccounts] = useState([])
-  const [modal, setModal] = useState(null) // null | 'create' | {edit: account} | {delete: account}
+  const [modal, setModal] = useState(null)
   const [loading, setLoading] = useState(false)
   const { hideBalance } = useBalanceVisibility()
 
@@ -79,30 +80,30 @@ export default function Accounts() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold text-gray-900">Contas Bancárias</h1>
+    <div className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Contas Bancárias</h1>
         <button onClick={() => setModal('create')} className="btn-primary">
           <Plus size={16} /> Nova Conta
         </button>
       </div>
 
       {accounts.length === 0 ? (
-        <div className="card p-10 text-center text-gray-400">Nenhuma conta cadastrada.</div>
+        <div className={styles.emptyState}>Nenhuma conta cadastrada.</div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className={styles.accountsGrid}>
           {accounts.map(acc => (
-            <div key={acc.id} className="card p-5">
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex gap-2">
-                  <button onClick={() => setModal({ edit: acc })} className="text-gray-400 hover:text-blue-600 transition-colors"><Pencil size={16} /></button>
-                  <button onClick={() => setModal({ delete: acc })} className="text-gray-400 hover:text-red-500 transition-colors"><Trash2 size={16} /></button>
+            <div key={acc.id} className={styles.accountCard}>
+              <div className={styles.accountCardTopRow}>
+                <div className={styles.accountActionButtons}>
+                  <button onClick={() => setModal({ edit: acc })} className={styles.editButton}><Pencil size={16} /></button>
+                  <button onClick={() => setModal({ delete: acc })} className={styles.deleteButton}><Trash2 size={16} /></button>
                 </div>
               </div>
-              <h2 className="text-lg font-semibold text-gray-800 mb-1">{acc.name}</h2>
-              <p className="text-2xl font-bold text-gray-900">{hideBalance ? '***' : formatCurrency(acc.balance)}</p>
-              <p className="text-xs text-gray-400 mt-1">{ACCOUNT_TYPES.find(t => t.value === acc.accountType)?.label}</p>
-              {acc.pluggyAccountId && <span className="text-xs text-blue-500 mt-1 block">Sincronizado via Open Finance</span>}
+              <h2 className={styles.accountName}>{acc.name}</h2>
+              <p className={styles.accountBalance}>{hideBalance ? '***' : formatCurrency(acc.balance)}</p>
+              <p className={styles.accountType}>{ACCOUNT_TYPES.find(t => t.value === acc.accountType)?.label}</p>
+              {acc.pluggyAccountId && <span className={styles.syncedBadge}>Sincronizado via Open Finance</span>}
             </div>
           ))}
         </div>

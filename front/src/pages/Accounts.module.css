@@ -1,0 +1,106 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pageHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.emptyState {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  padding: 2.5rem;
+  text-align: center;
+  color: #9ca3af;
+}
+
+.accountsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 640px) {
+  .accountsGrid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .accountsGrid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.accountCard {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  padding: 1.25rem;
+}
+
+.accountCardTopRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.accountActionButtons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.editButton {
+  color: #9ca3af;
+  transition: color 150ms;
+}
+.editButton:hover { color: #2563eb; }
+
+.deleteButton {
+  color: #9ca3af;
+  transition: color 150ms;
+}
+.deleteButton:hover { color: #ef4444; }
+
+.accountName {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.25rem;
+}
+
+.accountBalance {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.accountType {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.25rem;
+}
+
+.syncedBadge {
+  font-size: 0.75rem;
+  color: #3b82f6;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}

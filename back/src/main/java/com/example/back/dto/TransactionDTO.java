@@ -21,17 +21,15 @@ public class TransactionDTO {
             @NotNull @Positive BigDecimal amount,
             @NotNull LocalDate date,
             UUID categoryId,
-            /** Obrigatório quando type=EXPENSE e não for cartão */
             UUID accountId,
-            /** Preenchido quando a despesa é no cartão */
             UUID creditCardId,
             String notes,
-            /** Tipo de recorrência: NONE (padrão), SUBSCRIPTION ou INSTALLMENT */
             RecurrenceType recurrenceType,
-            /** Para parcelamento: parcela atual (1-based) */
             Integer installmentNumber,
-            /** Para parcelamento: total de parcelas */
-            Integer installmentTotal
+            Integer installmentTotal,
+            boolean thirdParty,
+            String thirdPartyPerson,
+            BigDecimal thirdPartyAmount
     ) {}
 
     public record Response(
@@ -47,13 +45,17 @@ public class TransactionDTO {
             String accountName,
             UUID creditCardId,
             String creditCardName,
+            UUID faturaId,
             String source,
             String notes,
             RecurrenceType recurrenceType,
             UUID recurrenceGroupId,
             Integer installmentNumber,
             Integer installmentTotal,
-            LocalDateTime createdAt
+            LocalDateTime createdAt,
+            boolean thirdParty,
+            String thirdPartyPerson,
+            BigDecimal thirdPartyAmount
     ) {
         public static Response from(Transaction t,
                                     String categoryName, String categoryColor,
@@ -71,18 +73,21 @@ public class TransactionDTO {
                     accountName,
                     t.getCreditCardId(),
                     creditCardName,
+                    t.getFaturaId(),
                     t.getSource().name(),
                     t.getNotes(),
                     t.getRecurrenceType(),
                     t.getRecurrenceGroupId(),
                     t.getInstallmentNumber(),
                     t.getInstallmentTotal(),
-                    t.getCreatedAt()
+                    t.getCreatedAt(),
+                    t.isThirdParty(),
+                    t.getThirdPartyPerson(),
+                    t.getThirdPartyAmount()
             );
         }
     }
 
-    /** Resumo de despesas futuras agrupadas por mês */
     public record UpcomingMonth(
             int year,
             int month,

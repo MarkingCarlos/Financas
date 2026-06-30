@@ -4,6 +4,7 @@ import { categoryService } from '../services/categoryService'
 import Modal from '../components/ui/Modal'
 import ConfirmDialog from '../components/ui/ConfirmDialog'
 import { Plus, Pencil, Trash2 } from 'lucide-react'
+import styles from './Establishments.module.css'
 
 const EMPTY = { name: '', categoryId: '' }
 
@@ -26,7 +27,7 @@ function EstablishmentForm({ initial, categories, onSubmit, onCancel, loading })
           ))}
         </select>
       </div>
-      <div className="flex justify-end gap-3 pt-2">
+      <div className={styles.formActions}>
         <button type="button" onClick={onCancel} className="btn-secondary">Cancelar</button>
         <button type="submit" disabled={loading} className="btn-primary">{loading ? 'Salvando...' : 'Salvar'}</button>
       </div>
@@ -66,43 +67,43 @@ export default function Establishments() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Estabelecimentos</h1>
+    <div className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Estabelecimentos</h1>
         <button onClick={() => setModal('create')} className="btn-primary">
           <Plus size={16} /> Novo Estabelecimento
         </button>
       </div>
 
-      <div className="card overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-gray-50 border-b border-gray-200">
+      <div className={styles.tableWrapper}>
+        <table className={styles.table}>
+          <thead className={styles.tableHead}>
             <tr>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Nome</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Categoria</th>
+              <th className={styles.tableHeadCell}>Nome</th>
+              <th className={styles.tableHeadCell}>Categoria</th>
               <th className="px-4 py-3" />
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className={styles.tableBody}>
             {items.length === 0 ? (
-              <tr><td colSpan={3} className="text-center py-10 text-gray-400">Nenhum estabelecimento cadastrado.</td></tr>
+              <tr><td colSpan={3} className={styles.tableEmptyRow}>Nenhum estabelecimento cadastrado.</td></tr>
             ) : items.map(e => (
-              <tr key={e.id} className="hover:bg-gray-50">
-                <td className="px-4 py-3 font-medium text-gray-900">{e.name}</td>
-                <td className="px-4 py-3">
+              <tr key={e.id} className={styles.tableRow}>
+                <td className={styles.tableCellName}>{e.name}</td>
+                <td className={styles.tableCellCategory}>
                   {e.categoryName ? (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+                    <span className={styles.categoryChip}
                       style={{ background: (e.categoryColor ?? '#e5e7eb') + '33', color: e.categoryColor ?? '#374151' }}>
                       {e.categoryName}
                     </span>
-                  ) : <span className="text-gray-400">—</span>}
+                  ) : <span className={styles.categoryEmpty}>—</span>}
                 </td>
-                <td className="px-4 py-3">
-                  <div className="flex gap-2 justify-end">
+                <td className={styles.tableCellActions}>
+                  <div className={styles.actionButtons}>
                     <button onClick={() => setModal({ edit: { ...e, categoryId: e.categoryId ?? '' } })}
-                      className="text-gray-400 hover:text-blue-600"><Pencil size={15} /></button>
+                      className={styles.editButton}><Pencil size={15} /></button>
                     <button onClick={() => setModal({ delete: e })}
-                      className="text-gray-400 hover:text-red-500"><Trash2 size={15} /></button>
+                      className={styles.deleteButton}><Trash2 size={15} /></button>
                   </div>
                 </td>
               </tr>

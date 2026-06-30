@@ -7,8 +7,14 @@ import { establishmentService } from '../services/establishmentService'
 import Modal from '../components/ui/Modal'
 import ConfirmDialog from '../components/ui/ConfirmDialog'
 import CurrencyInput from '../components/ui/CurrencyInput'
-import { Plus, Pencil, Trash2, ChevronLeft, ChevronRight, Search, CreditCard, Landmark } from 'lucide-react'
+import { Plus, Pencil, Trash2, ChevronLeft, ChevronRight, Search, CreditCard, Landmark, Users, X } from 'lucide-react'
 import { useBalanceVisibility } from '../context/BalanceVisibilityContext'
+import styles from './Transactions.module.css'
+
+const MONTHS = [
+  'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+  'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro',
+]
 
 function formatCurrency(v) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v ?? 0)
@@ -16,20 +22,38 @@ function formatCurrency(v) {
 function formatDate(d) {
   return new Date(d + 'T12:00:00').toLocaleDateString('pt-BR')
 }
+function formatBillMonth(d) {
+  if (!d) return '—'
+  const [year, month] = d.split('-')
+  return `${MONTHS[parseInt(month) - 1]}/${year}`
+}
+function billDate(month, year) {
+  return `${year}-${String(month).padStart(2, '0')}-01`
+}
 
 function TransactionForm({ initial, accounts, cards, categories, establishments, onSubmit, onCancel, loading }) {
   const [form, setForm] = useState(() => {
+    const now = new Date()
+    const isCC = !!(initial?.creditCardId)
     const base = initial ?? {
-      type: 'EXPENSE', description: '', amount: '', date: new Date().toISOString().split('T')[0],
+      type: 'EXPENSE', description: '', amount: '', date: now.toISOString().split('T')[0],
       categoryId: '', accountId: '', creditCardId: '', notes: '',
       recurrenceType: 'NONE', installmentNumber: 1, installmentTotal: 2,
+      thirdParty: false, thirdPartyPerson: '', thirdPartyAmount: '',
     }
+    const billMonth = isCC ? parseInt(base.date.split('-')[1]) : now.getMonth() + 1
+    const billYear  = isCC ? parseInt(base.date.split('-')[0]) : now.getFullYear()
     return {
       ...base,
+      billMonth,
+      billYear,
       amount: base.amount !== '' && base.amount != null ? Number(base.amount).toFixed(2) : '',
       recurrenceType: base.recurrenceType ?? 'NONE',
       installmentNumber: base.installmentNumber ?? 1,
       installmentTotal: base.installmentTotal ?? 2,
+      thirdParty: base.thirdParty ?? false,
+      thirdPartyPerson: base.thirdPartyPerson ?? '',
+      thirdPartyAmount: base.thirdPartyAmount != null ? Number(base.thirdPartyAmount).toFixed(2) : '',
     }
   })
   const [showSuggestions, setShowSuggestions] = useState(false)
@@ -47,12 +71,12 @@ function TransactionForm({ initial, accounts, cards, categories, establishments,
 
   return (
     <form onSubmit={ev => { ev.preventDefault(); onSubmit(form) }} className="space-y-4">
-      <div className="flex rounded-lg border border-gray-300 overflow-hidden">
+      <div className={styles.transactionTypeToggle}>
         <button type="button"
-          className={`flex-1 py-2 text-sm font-medium transition-colors ${form.type === 'EXPENSE' ? 'bg-red-500 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+          className={`${styles.typeButtonExpense} ${form.type === 'EXPENSE' ? styles.typeButtonExpenseActive : styles.typeButtonExpenseInactive}`}
           onClick={() => set('type', 'EXPENSE')}>Despesa</button>
         <button type="button"
-          className={`flex-1 py-2 text-sm font-medium transition-colors ${form.type === 'INCOME' ? 'bg-green-500 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+          className={`${styles.typeButtonIncome} ${form.type === 'INCOME' ? styles.typeButtonIncomeActive : styles.typeButtonIncomeInactive}`}
           onClick={() => set('type', 'INCOME')}>Receita</button>
       </div>
 
@@ -63,10 +87,10 @@ function TransactionForm({ initial, accounts, cards, categories, establishments,
           onFocus={() => setShowSuggestions(true)}
           onBlur={() => setTimeout(() => setShowSuggestions(false), 150)} />
         {showSuggestions && filteredEstablishments.length > 0 && (
-          <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+          <div className={styles.suggestionDropdown}>
             {filteredEstablishments.map(e => (
               <button key={e.id} type="button"
-                className="w-full text-left px-3 py-2 hover:bg-gray-50 flex justify-between items-center text-sm"
+                className={styles.suggestionItem}
                 onMouseDown={() => selectEstablishment(e)}>
                 <span>{e.name}</span>
                 {e.categoryName && (
@@ -86,15 +110,37 @@ function TransactionForm({ initial, accounts, cards, categories, establishments,
           <label className="label">Valor *</label>
           <CurrencyInput className="input" required value={form.amount} onChange={v => set('amount', v)} />
         </div>
-        <div>
-          <label className="label">Data *</label>
-          <input className="input" type="date" required value={form.date} onChange={e => set('date', e.target.value)} />
-        </div>
+        {isExpense && form.creditCardId ? (
+          <div className="col-span-2 grid grid-cols-2 gap-3">
+            <div>
+              <label className="label">Mês da fatura *</label>
+              <select className="select" value={form.billMonth} onChange={e => {
+                const m = parseInt(e.target.value)
+                setForm(f => ({ ...f, billMonth: m, date: billDate(m, f.billYear) }))
+              }}>
+                {MONTHS.map((m, i) => <option key={i + 1} value={i + 1}>{m}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="label">Ano *</label>
+              <input className="input" type="number" min={2020} max={2100} value={form.billYear}
+                onChange={e => {
+                  const y = parseInt(e.target.value)
+                  setForm(f => ({ ...f, billYear: y, date: billDate(f.billMonth, y) }))
+                }} />
+            </div>
+          </div>
+        ) : (
+          <div>
+            <label className="label">Data *</label>
+            <input className="input" type="date" required value={form.date} onChange={e => set('date', e.target.value)} />
+          </div>
+        )}
       </div>
 
       <div>
         <label className="label">Tipo de gasto</label>
-        <div className="flex gap-2">
+        <div className={styles.recurrenceRow}>
           {[
             { value: 'NONE', label: 'Único' },
             { value: 'SUBSCRIPTION', label: 'Assinatura' },
@@ -102,22 +148,18 @@ function TransactionForm({ initial, accounts, cards, categories, establishments,
           ].map(opt => (
             <button key={opt.value} type="button"
               onClick={() => set('recurrenceType', opt.value)}
-              className={`flex-1 py-2 rounded-lg text-xs font-medium border transition-colors ${
-                form.recurrenceType === opt.value
-                  ? 'bg-emerald-600 text-white border-emerald-600'
-                  : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'
-              }`}>
+              className={`${styles.recurrenceButton} ${form.recurrenceType === opt.value ? styles.recurrenceButtonActive : styles.recurrenceButtonInactive}`}>
               {opt.label}
             </button>
           ))}
         </div>
         {form.recurrenceType === 'SUBSCRIPTION' && (
-          <p className="text-xs text-purple-600 mt-1">Será lançada automaticamente todo mês.</p>
+          <p className={styles.subscriptionNote}>Será lançada automaticamente todo mês.</p>
         )}
       </div>
 
       {form.recurrenceType === 'INSTALLMENT' && (
-        <div className="grid grid-cols-2 gap-4 p-3 bg-blue-50 rounded-lg">
+        <div className={styles.installmentSection}>
           <div>
             <label className="label">Parcela atual *</label>
             <input className="input" type="number" min="1" required
@@ -130,7 +172,7 @@ function TransactionForm({ initial, accounts, cards, categories, establishments,
               value={form.installmentTotal}
               onChange={e => set('installmentTotal', e.target.value)} />
           </div>
-          <p className="col-span-2 text-xs text-blue-600">
+          <p className={styles.installmentNote}>
             As parcelas restantes serão lançadas automaticamente nos meses seguintes.
           </p>
         </div>
@@ -145,21 +187,85 @@ function TransactionForm({ initial, accounts, cards, categories, establishments,
       </div>
 
       {isExpense && (
-        <div className="grid grid-cols-2 gap-4">
+        <div className={styles.accountCardRow}>
           <div>
             <label className="label">Conta bancária</label>
-            <select className="select" value={form.accountId} onChange={e => { set('accountId', e.target.value); if (e.target.value) set('creditCardId', '') }}>
+            <select className="select" value={form.accountId} onChange={e => { set('accountId', e.target.value); if (e.target.value) { set('creditCardId', ''); set('thirdParty', false) } }}>
               <option value="">Nenhuma</option>
               {accounts.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
             </select>
           </div>
           <div>
             <label className="label">Cartão de crédito</label>
-            <select className="select" value={form.creditCardId} onChange={e => { set('creditCardId', e.target.value); if (e.target.value) set('accountId', '') }}>
+            <select className="select" value={form.creditCardId} onChange={e => {
+              const val = e.target.value
+              const selectedCard = cards.find(c => c.id === val)
+              const openBill = selectedCard?.bills?.find(b => b.status === 'ABERTA')
+              setForm(f => {
+                const m = openBill ? openBill.mes : f.billMonth
+                const y = openBill ? openBill.ano : f.billYear
+                return {
+                  ...f,
+                  creditCardId: val,
+                  accountId: val ? '' : f.accountId,
+                  billMonth: val ? m : f.billMonth,
+                  billYear: val ? y : f.billYear,
+                  date: val ? billDate(m, y) : new Date().toISOString().split('T')[0],
+                }
+              })
+            }}>
               <option value="">Nenhum</option>
               {cards.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
           </div>
+        </div>
+      )}
+
+      {isExpense && form.creditCardId && (
+        <div className={`${styles.thirdPartySection} ${form.thirdParty ? styles.thirdPartySectionActive : styles.thirdPartySectionInactive}`}>
+          <label className={styles.thirdPartyToggleLabel}>
+            <div
+              onClick={() => set('thirdParty', !form.thirdParty)}
+              className={`${styles.thirdPartyToggleTrack} ${form.thirdParty ? styles.thirdPartyToggleTrackOn : styles.thirdPartyToggleTrackOff}`}
+            >
+              <span className={`${styles.thirdPartyToggleThumb} ${form.thirdParty ? styles.thirdPartyToggleThumbOn : styles.thirdPartyToggleThumbOff}`} />
+            </div>
+            <span className={styles.thirdPartyToggleName}>
+              <Users size={14} /> Compra de terceiro
+            </span>
+          </label>
+          {form.thirdParty && (
+            <div className={styles.thirdPartyFields}>
+              <div className={styles.thirdPartyFieldFull}>
+                <label className="label">Pessoa *</label>
+                <input className="input" placeholder="Nome de quem fez a compra"
+                  value={form.thirdPartyPerson} onChange={e => set('thirdPartyPerson', e.target.value)} required />
+              </div>
+              <div className={styles.thirdPartyFieldFull}>
+                <label className="label">Valor repassado por parcela *</label>
+                <CurrencyInput className="input" value={form.thirdPartyAmount}
+                  onChange={v => set('thirdPartyAmount', v)} required />
+                {form.thirdPartyAmount && form.amount && (() => {
+                  const repayment = parseFloat(form.thirdPartyAmount)
+                  const total = parseFloat(form.amount)
+                  if (!isNaN(repayment) && !isNaN(total)) {
+                    const diff = repayment - total
+                    if (diff > 0) return (
+                      <p className={styles.thirdPartyExcessNote}>
+                        Excedente de {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(diff)} será adicionado como receita.
+                      </p>
+                    )
+                    if (diff < 0) return (
+                      <p className={styles.thirdPartyPartNote}>
+                        Sua parte no cartão: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(-diff)}
+                      </p>
+                    )
+                    return <p className={styles.thirdPartyNeutralNote}>Compra não contabilizada no cartão.</p>
+                  }
+                })()}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -168,7 +274,7 @@ function TransactionForm({ initial, accounts, cards, categories, establishments,
         <textarea className="input" rows={2} value={form.notes} onChange={e => set('notes', e.target.value)} />
       </div>
 
-      <div className="flex justify-end gap-3 pt-2">
+      <div className={styles.formActions}>
         <button type="button" onClick={onCancel} className="btn-secondary">Cancelar</button>
         <button type="submit" disabled={loading} className="btn-primary">{loading ? 'Salvando...' : 'Salvar'}</button>
       </div>
@@ -203,13 +309,13 @@ function GroupDetailModal({ transaction, onClose }) {
   return (
     <Modal title={transaction.description} onClose={onClose}>
       <div className="space-y-4">
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className={styles.groupDetailBadgeRow}>
           {isInstallment ? (
-            <span className="px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
+            <span className={styles.badgeGroupInstallment}>
               {paidCount}/{rows.length} parcelas pagas
             </span>
           ) : (
-            <span className="px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 text-xs font-medium">
+            <span className={styles.badgeGroupSubscription}>
               Assinatura · {paidCount} cobranças pagas
             </span>
           )}
@@ -220,12 +326,12 @@ function GroupDetailModal({ transaction, onClose }) {
             </span>
           )}
           {transaction.creditCardName && (
-            <span className="flex items-center gap-1 text-xs text-purple-600">
+            <span className={styles.groupDetailCCBadge}>
               <CreditCard size={12} /> {transaction.creditCardName}
             </span>
           )}
           {transaction.accountName && (
-            <span className="flex items-center gap-1 text-xs text-blue-600">
+            <span className={styles.groupDetailAccountBadge}>
               <Landmark size={12} /> {transaction.accountName}
             </span>
           )}
@@ -234,30 +340,32 @@ function GroupDetailModal({ transaction, onClose }) {
         {loadingGroup ? (
           <p className="text-sm text-gray-400 py-8 text-center">Carregando...</p>
         ) : (
-          <div className="overflow-x-auto max-h-96 overflow-y-auto">
-            <table className="w-full text-sm">
-              <thead className="sticky top-0 bg-white border-b border-gray-200">
+          <div className={styles.groupDetailTableWrapper}>
+            <table className={styles.groupDetailTable}>
+              <thead className={styles.groupDetailTableHead}>
                 <tr className="text-left text-gray-500">
-                  {isInstallment && <th className="pb-2 pr-4 font-medium">Parcela</th>}
-                  <th className="pb-2 pr-4 font-medium">Data</th>
-                  <th className="pb-2 pr-4 font-medium">Valor</th>
-                  <th className="pb-2 font-medium">Status</th>
+                  {isInstallment && <th className={styles.groupDetailTableHeadCell}>Parcela</th>}
+                  <th className={styles.groupDetailTableHeadCell}>{transaction.creditCardId ? 'Fatura' : 'Data'}</th>
+                  <th className={styles.groupDetailTableHeadCell}>Valor</th>
+                  <th className={styles.groupDetailTableHeadCell}>Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className={styles.groupDetailTableBody}>
                 {rows.map(r => {
                   const status = getStatus(r.date)
                   return (
-                    <tr key={r.id} className={r.date > today ? 'opacity-60' : ''}>
+                    <tr key={r.id} className={r.date > today ? styles.tableRowFuture : ''}>
                       {isInstallment && (
-                        <td className="py-2.5 pr-4 text-gray-500 text-xs font-medium">
+                        <td className={styles.groupDetailInstallmentCell}>
                           {r.installmentNumber}/{r.installmentTotal}
                         </td>
                       )}
-                      <td className="py-2.5 pr-4 text-gray-700">{formatDate(r.date)}</td>
-                      <td className="py-2.5 pr-4 font-semibold text-red-600">{hideBalance ? '***' : formatCurrency(r.amount)}</td>
-                      <td className="py-2.5">
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${status.cls}`}>{status.label}</span>
+                      <td className={styles.groupDetailDateCell}>
+                        {transaction.creditCardId ? formatBillMonth(r.date) : formatDate(r.date)}
+                      </td>
+                      <td className={styles.groupDetailAmountCell}>{hideBalance ? '***' : formatCurrency(r.amount)}</td>
+                      <td className={styles.groupDetailStatusCell}>
+                        <span className={`${styles.statusBadge} ${status.cls}`}>{status.label}</span>
                       </td>
                     </tr>
                   )
@@ -286,6 +394,7 @@ export default function Transactions() {
   const [searchDraft, setSearchDraft] = useState('')
   const [search, setSearch] = useState('')
   const [clientPage, setClientPage] = useState(0)
+  const [selectedIds, setSelectedIds] = useState(new Set())
   const { hideBalance } = useBalanceVisibility()
 
   useEffect(() => {
@@ -308,16 +417,14 @@ export default function Transactions() {
     establishmentService.list().then(setEstablishments)
   }, [])
 
-  // When filters change, reset client page
-  useEffect(() => { setClientPage(0) }, [typeFilter, search])
+  useEffect(() => { setClientPage(0); setSelectedIds(new Set()) }, [typeFilter, search])
 
   const groupedTransactions = useMemo(() => {
     const all = data.content ?? []
-    if (search) return all  // Searching: show individual results without grouping
+    if (search) return all
 
     const today = new Date().toISOString().split('T')[0]
 
-    // Build groups
     const groups = {}
     for (const t of all) {
       if (t.recurrenceGroupId) {
@@ -326,17 +433,16 @@ export default function Transactions() {
       }
     }
 
-    // Compute representative + metadata per group
     const groupMeta = {}
     for (const [id, members] of Object.entries(groups)) {
-      const paid = members
-        .filter(t => t.date <= today)
-        .sort((a, b) => b.date.localeCompare(a.date))
-      const rep = paid[0] ?? [...members].sort((a, b) => a.date.localeCompare(b.date))[0]
-      groupMeta[id] = { rep, paidCount: paid.length, totalCount: members.length }
+      const paid = members.filter(t => t.date <= today).sort((a, b) => b.date.localeCompare(a.date))
+      const future = members.filter(t => t.date > today).sort((a, b) => a.date.localeCompare(b.date))
+      const rep = paid[0] ?? future[0]
+      const paidCount = paid[0]?.installmentNumber
+        ?? (future[0] ? future[0].installmentNumber - 1 : 0)
+      groupMeta[id] = { rep, paidCount, totalCount: members.length }
     }
 
-    // Deduplicate
     const seen = new Set()
     const result = []
     for (const t of all) {
@@ -349,7 +455,6 @@ export default function Transactions() {
       }
     }
 
-    // Re-sort by date desc (rep dates can differ from first-seen order)
     return result.sort((a, b) =>
       b.date !== a.date
         ? b.date.localeCompare(a.date)
@@ -372,6 +477,9 @@ export default function Transactions() {
     recurrenceType: form.recurrenceType || 'NONE',
     installmentNumber: form.recurrenceType === 'INSTALLMENT' ? parseInt(form.installmentNumber) : null,
     installmentTotal: form.recurrenceType === 'INSTALLMENT' ? parseInt(form.installmentTotal) : null,
+    thirdParty: !!form.thirdParty,
+    thirdPartyPerson: form.thirdParty ? (form.thirdPartyPerson || null) : null,
+    thirdPartyAmount: form.thirdParty && form.thirdPartyAmount ? parseFloat(form.thirdPartyAmount) : null,
   })
 
   const handleCreate = async (form) => {
@@ -392,29 +500,69 @@ export default function Transactions() {
     finally { setLoading(false) }
   }
 
+  const handleBulkDelete = async () => {
+    setLoading(true)
+    try {
+      await transactionService.removeMany([...selectedIds])
+      setSelectedIds(new Set())
+      setModal(null)
+      load()
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const toggleSelect = (id) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev)
+      next.has(id) ? next.delete(id) : next.add(id)
+      return next
+    })
+  }
+
+  const pageIds = pagedTransactions.map(t => t.id)
+  const allPageSelected = pageIds.length > 0 && pageIds.every(id => selectedIds.has(id))
+  const somePageSelected = pageIds.some(id => selectedIds.has(id))
+
+  const toggleSelectAll = () => {
+    if (allPageSelected) {
+      setSelectedIds(prev => {
+        const next = new Set(prev)
+        pageIds.forEach(id => next.delete(id))
+        return next
+      })
+    } else {
+      setSelectedIds(prev => {
+        const next = new Set(prev)
+        pageIds.forEach(id => next.add(id))
+        return next
+      })
+    }
+  }
+
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold text-gray-900">Transações</h1>
+    <div className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Transações</h1>
         <button onClick={() => setModal('create')} className="btn-primary">
           <Plus size={16} /> Nova Transação
         </button>
       </div>
 
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="flex flex-wrap gap-2">
+      <div className={styles.filterBar}>
+        <div className={styles.filterButtons}>
           {['', 'EXPENSE', 'INCOME'].map(t => (
             <button key={t}
               onClick={() => setTypeFilter(t)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors ${typeFilter === t ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'}`}>
+              className={`${styles.filterButton} ${typeFilter === t ? styles.filterButtonActive : styles.filterButtonInactive}`}>
               {t === '' ? 'Todas' : t === 'EXPENSE' ? 'Despesas' : 'Receitas'}
             </button>
           ))}
         </div>
-        <div className="relative ml-auto">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+        <div className={styles.searchWrapper}>
+          <Search size={15} className={styles.searchIcon} />
           <input
-            className="input pl-8 py-1.5 text-sm w-56"
+            className={styles.searchInput}
             placeholder="Buscar por nome..."
             value={searchDraft}
             onChange={e => setSearchDraft(e.target.value)}
@@ -422,59 +570,143 @@ export default function Transactions() {
         </div>
       </div>
 
-      <div className="card overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm min-w-[600px]">
-            <thead className="bg-gray-50 border-b border-gray-200">
+      {selectedIds.size > 0 && (
+        <div className={styles.bulkActionBar}>
+          <div className={styles.bulkActionInfo}>
+            <span className={styles.bulkActionCount}>{selectedIds.size}</span>
+            {selectedIds.size === 1 ? 'transação selecionada' : 'transações selecionadas'}
+          </div>
+          <div className={styles.bulkActionButtons}>
+            <button onClick={() => setSelectedIds(new Set())} className={styles.bulkClearButton}>
+              <X size={14} /> Limpar seleção
+            </button>
+            <button
+              onClick={() => setModal({ bulkDelete: true })}
+              disabled={loading}
+              className={styles.bulkDeleteButton}>
+              <Trash2 size={14} /> Excluir selecionadas
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className={styles.tableCard}>
+        {/* Mobile */}
+        <div className={styles.mobileList}>
+          {pagedTransactions.length === 0 ? (
+            <p className={styles.mobileEmptyState}>Nenhuma transação encontrada.</p>
+          ) : pagedTransactions.map(t => {
+            const isGroup = t.recurrenceGroupId && t._totalCount > 0
+            const isSelected = selectedIds.has(t.id)
+            return (
+              <div key={t.id} className={`${styles.mobileTransactionRow} ${isSelected ? styles.tableRowSelected : ''}`}>
+                <div className={styles.mobileCheckboxWrapper}>
+                  <input type="checkbox" className={styles.checkboxInput}
+                    checked={isSelected} onChange={() => toggleSelect(t.id)} />
+                </div>
+                <div className={styles.mobileTransactionContent}>
+                  <div className={styles.mobileTransactionNameRow}>
+                    <span className={styles.mobileTransactionName}>{t.description}</span>
+                    {isGroup && t.recurrenceType === 'SUBSCRIPTION' && (
+                      <button onClick={() => setGroupModal(t)} className={styles.badgeSubscriptionMobile}>↻</button>
+                    )}
+                    {isGroup && t.recurrenceType === 'INSTALLMENT' && (
+                      <button onClick={() => setGroupModal(t)} className={styles.badgeInstallmentMobile}>
+                        {t._paidCount}/{t.installmentTotal}x
+                      </button>
+                    )}
+                    {t.thirdParty && (
+                      <span className={styles.badgeThirdPartyMobile}>
+                        <Users size={10} /> {t.thirdPartyPerson}
+                      </span>
+                    )}
+                  </div>
+                  <p className={styles.mobileTransactionMeta}>
+                    {t.creditCardId ? formatBillMonth(t.date) : formatDate(t.date)}
+                    {t.categoryName && ` · ${t.categoryName}`}
+                    {(t.creditCardName ?? t.accountName) && ` · ${t.creditCardName ?? t.accountName}`}
+                  </p>
+                </div>
+                <div className={styles.mobileTransactionRight}>
+                  <span className={`${styles.mobileTransactionAmount} ${t.type === 'INCOME' ? styles.mobileTransactionAmountIncome : styles.mobileTransactionAmountExpense}`}>
+                    {hideBalance ? '***' : `${t.type === 'INCOME' ? '+' : '-'}${formatCurrency(t.amount)}`}
+                  </span>
+                  <div className={styles.mobileActionButtons}>
+                    <button onClick={() => setModal({ edit: { ...t, categoryId: t.categoryId ?? '', accountId: t.accountId ?? '', creditCardId: t.creditCardId ?? '' } })}
+                      className={styles.mobileEditButton}><Pencil size={14} /></button>
+                    <button onClick={() => setModal({ delete: t })}
+                      className={styles.mobileDeleteButton}><Trash2 size={14} /></button>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Desktop */}
+        <div className={styles.desktopTableWrapper}>
+          <table className={styles.table}>
+            <thead className={styles.tableHead}>
               <tr>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Descrição</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Categoria</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Conta / Cartão</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Data</th>
-                <th className="text-right px-4 py-3 font-medium text-gray-500">Valor</th>
-                <th className="px-4 py-3" />
+                <th className={styles.checkboxCellHeader}>
+                  <input type="checkbox" className={styles.checkboxInput}
+                    checked={allPageSelected}
+                    ref={el => { if (el) el.indeterminate = somePageSelected && !allPageSelected }}
+                    onChange={toggleSelectAll} />
+                </th>
+                <th className={styles.tableHeadCell}>Descrição</th>
+                <th className={styles.tableHeadCell}>Categoria</th>
+                <th className={styles.tableHeadCell}>Conta / Cartão</th>
+                <th className={styles.tableHeadCell}>Data</th>
+                <th className={styles.tableHeadCellRight}>Valor</th>
+                <th className={styles.tableHeadCell} />
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className={styles.tableBody}>
               {pagedTransactions.length === 0 ? (
-                <tr><td colSpan={6} className="text-center py-10 text-gray-400">Nenhuma transação encontrada.</td></tr>
+                <tr><td colSpan={7} className={styles.tableEmptyCell}>Nenhuma transação encontrada.</td></tr>
               ) : pagedTransactions.map(t => {
                 const isGroup = t.recurrenceGroupId && t._totalCount > 0
-
+                const isSelected = selectedIds.has(t.id)
                 return (
-                  <tr key={t.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3">
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-medium text-gray-900">{t.description}</span>
+                  <tr key={t.id} className={`${styles.tableRow} ${isSelected ? styles.tableRowSelected : ''}`}>
+                    <td className={styles.checkboxCell}>
+                      <input type="checkbox" className={styles.checkboxInput}
+                        checked={isSelected} onChange={() => toggleSelect(t.id)} />
+                    </td>
+                    <td className={styles.descriptionCell}>
+                      <div className={styles.descriptionCellContent}>
+                        <div className={styles.descriptionNameRow}>
+                          <span className={styles.descriptionName}>{t.description}</span>
                           {isGroup && t.recurrenceType === 'SUBSCRIPTION' && (
-                            <button
-                              onClick={() => setGroupModal(t)}
-                              className="text-xs px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 hover:bg-purple-200 transition-colors font-medium">
+                            <button onClick={() => setGroupModal(t)} className={styles.badgeSubscription}>
                               ↻ Assinatura
                             </button>
                           )}
                           {isGroup && t.recurrenceType === 'INSTALLMENT' && (
-                            <button
-                              onClick={() => setGroupModal(t)}
-                              className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 hover:bg-blue-200 transition-colors font-medium">
+                            <button onClick={() => setGroupModal(t)} className={styles.badgeInstallment}>
                               {t._paidCount}/{t.installmentTotal} parcelas
                             </button>
                           )}
+                          {t.thirdParty && (
+                            <span className={styles.badgeThirdParty}>
+                              <Users size={11} /> {t.thirdPartyPerson}
+                            </span>
+                          )}
                         </div>
-                        {t.notes && <p className="text-xs text-gray-400 truncate max-w-xs">{t.notes}</p>}
+                        {t.notes && <p className={styles.transactionNotes}>{t.notes}</p>}
                       </div>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className={styles.categoryCell}>
                       {t.categoryName ? (
-                        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium"
+                        <span className={styles.categoryChip}
                           style={{ background: (t.categoryColor ?? '#e5e7eb') + '33', color: t.categoryColor ?? '#374151' }}>
                           {t.categoryName}
                         </span>
-                      ) : <span className="text-gray-400">—</span>}
+                      ) : <span className={styles.categoryEmpty}>—</span>}
                     </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-1.5 text-gray-500">
+                    <td className={styles.accountCell}>
+                      <div className={styles.accountCellContent}>
                         {t.creditCardId
                           ? <CreditCard size={13} className="text-purple-400 flex-shrink-0" />
                           : t.accountId
@@ -483,16 +715,18 @@ export default function Transactions() {
                         <span>{t.creditCardName ?? t.accountName ?? '—'}</span>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-gray-500">{formatDate(t.date)}</td>
-                    <td className={`px-4 py-3 text-right font-semibold ${t.type === 'INCOME' ? 'text-green-600' : 'text-red-600'}`}>
+                    <td className={styles.dateCell}>
+                      {t.creditCardId ? formatBillMonth(t.date) : formatDate(t.date)}
+                    </td>
+                    <td className={`${styles.amountCell} ${t.type === 'INCOME' ? styles.amountIncome : styles.amountExpense}`}>
                       {hideBalance ? '***' : `${t.type === 'INCOME' ? '+' : '-'}${formatCurrency(t.amount)}`}
                     </td>
-                    <td className="px-4 py-3">
-                      <div className="flex gap-2 justify-end">
+                    <td className={styles.actionsCell}>
+                      <div className={styles.actionButtonsRow}>
                         <button onClick={() => setModal({ edit: { ...t, categoryId: t.categoryId ?? '', accountId: t.accountId ?? '', creditCardId: t.creditCardId ?? '' } })}
-                          className="text-gray-400 hover:text-blue-600"><Pencil size={15} /></button>
+                          className={styles.editButton}><Pencil size={15} /></button>
                         <button onClick={() => setModal({ delete: t })}
-                          className="text-gray-400 hover:text-red-500"><Trash2 size={15} /></button>
+                          className={styles.deleteButton}><Trash2 size={15} /></button>
                       </div>
                     </td>
                   </tr>
@@ -504,11 +738,11 @@ export default function Transactions() {
       </div>
 
       {totalClientPages > 1 && (
-        <div className="flex items-center justify-center gap-3">
+        <div className={styles.paginationRow}>
           <button onClick={() => setClientPage(p => p - 1)} disabled={clientPage === 0} className="btn-secondary px-3 py-1.5">
             <ChevronLeft size={16} />
           </button>
-          <span className="text-sm text-gray-600">Página {clientPage + 1} de {totalClientPages}</span>
+          <span className={styles.paginationLabel}>Página {clientPage + 1} de {totalClientPages}</span>
           <button onClick={() => setClientPage(p => p + 1)} disabled={clientPage >= totalClientPages - 1} className="btn-secondary px-3 py-1.5">
             <ChevronRight size={16} />
           </button>
@@ -531,6 +765,11 @@ export default function Transactions() {
         <ConfirmDialog title="Excluir Transação"
           message={`Deseja excluir "${modal.delete.description}"?`}
           onConfirm={handleDelete} onCancel={() => setModal(null)} loading={loading} />
+      )}
+      {modal?.bulkDelete && (
+        <ConfirmDialog title="Excluir Transações"
+          message={`Deseja excluir ${selectedIds.size} ${selectedIds.size === 1 ? 'transação selecionada' : 'transações selecionadas'}? Esta ação não pode ser desfeita.`}
+          onConfirm={handleBulkDelete} onCancel={() => setModal(null)} loading={loading} />
       )}
       {groupModal && (
         <GroupDetailModal transaction={groupModal} onClose={() => setGroupModal(null)} />

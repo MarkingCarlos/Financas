@@ -1,19 +1,15 @@
 package com.example.back.service;
 
 import com.example.back.domain.CreditCard;
-import com.example.back.domain.Transaction;
-import com.example.back.domain.TransactionSource;
-import com.example.back.domain.TransactionType;
 import com.example.back.dto.CreditCardDTO;
 import com.example.back.exception.ResourceNotFoundException;
-import com.example.back.repository.BankAccountRepository;
 import com.example.back.repository.CreditCardRepository;
-import com.example.back.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,20 +18,22 @@ import java.util.UUID;
 public class CreditCardService {
 
     private final CreditCardRepository repository;
-    private final BankAccountRepository bankAccountRepository;
-    private final TransactionRepository transactionRepository;
+    private final BillService billService;
 
     public List<CreditCardDTO.Response> findAll(String userId) {
         return repository.findByUserIdOrderByNameAsc(userId)
-                .stream().map(CreditCardDTO.Response::from).toList();
+                .stream().map(this::toResponse).toList();
     }
 
     public CreditCardDTO.Response findById(UUID id, String userId) {
-        return CreditCardDTO.Response.from(getOwnedCard(id, userId));
+        return toResponse(getOwnedCard(id, userId));
     }
 
     @Transactional
     public CreditCardDTO.Response create(CreditCardDTO.Request request, String userId) {
+        if (request.billMonth() == null || request.billYear() == null) {
+            throw new IllegalArgumentException("Mês e ano da fatura inicial são obrigatórios");
+        }
         CreditCard card = CreditCard.builder()
                 .userId(userId)
                 .name(request.name())
@@ -43,10 +41,11 @@ public class CreditCardService {
                 .lastFourDigits(request.lastFourDigits())
                 .creditLimit(request.creditLimit())
                 .currentBalance(request.currentBalance() != null ? request.currentBalance() : BigDecimal.ZERO)
-                .closingDay(request.closingDay())
-                .dueDay(request.dueDay())
+                .color(request.color())
                 .build();
-        return CreditCardDTO.Response.from(repository.save(card));
+        card = repository.save(card);
+        billService.getOrCreateBill(card.getId(), request.billMonth(), request.billYear());
+        return toResponse(card);
     }
 
     @Transactional
@@ -57,45 +56,8 @@ public class CreditCardService {
         card.setLastFourDigits(request.lastFourDigits());
         card.setCreditLimit(request.creditLimit());
         if (request.currentBalance() != null) card.setCurrentBalance(request.currentBalance());
-        card.setClosingDay(request.closingDay());
-        card.setDueDay(request.dueDay());
-        return CreditCardDTO.Response.from(repository.save(card));
-    }
-
-    /** Paga a fatura do cartão debitando de uma conta bancária */
-    @Transactional
-    public CreditCardDTO.Response payBill(UUID cardId, CreditCardDTO.PaymentRequest request, String userId) {
-        CreditCard card = getOwnedCard(cardId, userId);
-
-        var account = bankAccountRepository.findByIdAndUserId(request.accountId(), userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Conta não encontrada"));
-
-        if (account.getBalance().compareTo(request.amount()) < 0) {
-            throw new IllegalArgumentException("Saldo insuficiente na conta para pagar a fatura");
-        }
-
-        // Debita da conta bancária
-        account.setBalance(account.getBalance().subtract(request.amount()));
-        bankAccountRepository.save(account);
-
-        // Reduz a dívida do cartão
-        BigDecimal novaFatura = card.getCurrentBalance().subtract(request.amount());
-        card.setCurrentBalance(novaFatura.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : novaFatura);
-        repository.save(card);
-
-        // Registra como transação de despesa na conta
-        Transaction payment = Transaction.builder()
-                .userId(UUID.fromString(userId))
-                .type(TransactionType.EXPENSE)
-                .description("Pagamento fatura - " + card.getName())
-                .amount(request.amount())
-                .date(request.date())
-                .accountId(account.getId())
-                .source(TransactionSource.MANUAL)
-                .build();
-        transactionRepository.save(payment);
-
-        return CreditCardDTO.Response.from(card);
+        if (request.color() != null) card.setColor(request.color());
+        return toResponse(repository.save(card));
     }
 
     @Transactional
@@ -106,5 +68,9 @@ public class CreditCardService {
     public CreditCard getOwnedCard(UUID id, String userId) {
         return repository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cartão de crédito não encontrado: " + id));
+    }
+
+    private CreditCardDTO.Response toResponse(CreditCard card) {
+        return CreditCardDTO.Response.from(card, billService.getBillResponsesForCard(card.getId()));
     }
 }

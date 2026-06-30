@@ -44,13 +44,6 @@ public class CreditCardController extends BaseController {
         return service.update(id, request, userId(jwt));
     }
 
-    @PostMapping("/{id}/pay")
-    public CreditCardDTO.Response payBill(@PathVariable UUID id,
-                                          @Valid @RequestBody CreditCardDTO.PaymentRequest request,
-                                          @AuthenticationPrincipal Jwt jwt) {
-        return service.payBill(id, request, userId(jwt));
-    }
-
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable UUID id,

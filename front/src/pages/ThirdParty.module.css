@@ -1,0 +1,289 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pageHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.emptyState {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  padding: 2.5rem;
+  text-align: center;
+  color: #9ca3af;
+}
+
+.emptyStateIcon {
+  margin: 0 auto;
+  margin-bottom: 0.75rem;
+  opacity: 0.3;
+}
+
+.emptyStateSubtext {
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.summaryCard {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  padding: 1rem;
+}
+
+.summaryLabel {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.summaryValueReceivable {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #d97706;
+}
+
+.summaryValueCost {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #dc2626;
+}
+
+.personGroupContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.personGroupHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.personGroupName {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.personGroupCount {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.purchasesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+@media (min-width: 640px) {
+  .purchasesGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.purchaseCard {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.purchaseCardActive {
+  border-color: #fde68a;
+}
+
+.purchaseCardDone {
+  opacity: 0.6;
+  border-color: #e5e7eb;
+}
+
+.purchaseCardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.purchaseTitle {
+  font-weight: 600;
+  color: #111827;
+}
+
+.purchaseCardName {
+  font-size: 0.75rem;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.125rem;
+}
+
+.badgeSettled {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  background-color: #d1fae5;
+  color: #047857;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.badgePending {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  background-color: #fef3c7;
+  color: #b45309;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.installmentGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  text-align: center;
+  font-size: 0.75rem;
+}
+
+.installmentCellBase {
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.installmentCellRepayment {
+  background-color: #fffbeb;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.installmentCellCostPositive {
+  background-color: #fef2f2;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.installmentCellCostZero {
+  background-color: #ecfdf5;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.installmentCellLabel {
+  color: #9ca3af;
+  margin-bottom: 0.125rem;
+}
+
+.installmentCellLabelRepayment {
+  color: #d97706;
+  margin-bottom: 0.125rem;
+}
+
+.installmentCellLabelCostPositive {
+  color: #ef4444;
+  margin-bottom: 0.125rem;
+}
+
+.installmentCellLabelCostZero {
+  color: #059669;
+  margin-bottom: 0.125rem;
+}
+
+.installmentCellValue {
+  font-weight: 600;
+  color: #374151;
+}
+
+.installmentCellValueRepayment {
+  font-weight: 600;
+  color: #b45309;
+}
+
+.installmentCellValueCostPositive {
+  font-weight: 600;
+  color: #dc2626;
+}
+
+.installmentCellValueCostZero {
+  font-weight: 600;
+  color: #059669;
+}
+
+.nextInstallmentRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  border-top: 1px solid #f3f4f6;
+  padding-top: 0.5rem;
+}
+
+.nextInstallmentDate {
+  color: #6b7280;
+}
+
+.totalRemaining {
+  font-weight: 600;
+  color: #b45309;
+}
+
+.showDoneButton {
+  font-size: 0.875rem;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 150ms;
+}
+.showDoneButton:hover { color: #374151; }
+
+.doneGrid {
+  margin-top: 0.75rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+@media (min-width: 640px) {
+  .doneGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.allSettledCard {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  padding: 1.5rem;
+  text-align: center;
+  color: #9ca3af;
+}

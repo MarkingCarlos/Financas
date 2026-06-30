@@ -45,6 +45,9 @@ public class Transaction {
     @Column(name = "cartao_credito_id")
     private UUID creditCardId;
 
+    @Column(name = "fatura_id")
+    private UUID faturaId;
+
     @Column(name = "categoria_id")
     private UUID categoryId;
 
@@ -72,6 +75,16 @@ public class Transaction {
 
     @Column(name = "total_parcelas")
     private Integer installmentTotal;
+
+    @Column(name = "terceiro", nullable = false)
+    @Builder.Default
+    private boolean thirdParty = false;
+
+    @Column(name = "terceiro_pessoa")
+    private String thirdPartyPerson;
+
+    @Column(name = "terceiro_valor", precision = 15, scale = 2)
+    private BigDecimal thirdPartyAmount;
 
     @CreationTimestamp
     @Column(name = "criado_em", updatable = false)

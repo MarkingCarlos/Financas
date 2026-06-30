@@ -1,0 +1,131 @@
+.mobileOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background-color: rgb(0 0 0 / 0.4);
+}
+@media (min-width: 1024px) {
+  .mobileOverlay {
+    display: none;
+  }
+}
+
+.sidebarAside {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 50;
+  width: 16rem;
+  background-color: #fff;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  transition: transform 300ms ease-in-out;
+}
+
+.sidebarOpen {
+  transform: translateX(0);
+}
+
+.sidebarClosed {
+  transform: translateX(-100%);
+}
+
+/* Deve vir DEPOIS de .sidebarClosed para vencer no cascade em telas lg+ */
+@media (min-width: 1024px) {
+  .sidebarAside {
+    position: static;
+    transform: translateX(0);
+    z-index: auto;
+    transition: none;
+    flex-shrink: 0;
+  }
+}
+
+.brandHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.brandName {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.closeButton {
+  padding: 0.25rem;
+  color: #9ca3af;
+  transition: color 150ms;
+}
+.closeButton:hover {
+  color: #4b5563;
+}
+@media (min-width: 1024px) {
+  .closeButton {
+    display: none;
+  }
+}
+
+.navList {
+  flex: 1 1 0%;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  overflow-y: auto;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 150ms, background-color 150ms;
+  text-decoration: none;
+}
+
+.navLinkActive {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+}
+
+.navLinkInactive {
+  color: #4b5563;
+}
+.navLinkInactive:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.footer {
+  padding: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  width: 100%;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 150ms, background-color 150ms;
+}
+.logoutButton:hover {
+  background-color: #fef2f2;
+  color: #dc2626;
+}

@@ -9,8 +9,11 @@ public record DashboardDTO(
         BigDecimal totalSavings,
         BigDecimal incomeCurrentMonth,
         BigDecimal expensesCurrentMonth,
+        BigDecimal realExpensesCurrentMonth,
         List<CategoryExpense> expensesByCategory,
-        List<TransactionDTO.Response> recentTransactions
+        List<TransactionDTO.Response> recentTransactions,
+        int selectedYear,
+        int selectedMonth
 ) {
     public record CategoryExpense(
             String categoryId,

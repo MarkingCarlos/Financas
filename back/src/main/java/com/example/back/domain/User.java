@@ -21,14 +21,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "google_id", nullable = false, unique = true)
+    @Column(name = "google_id", unique = true)
     private String googleId;
 
     @Column(name = "nome", nullable = false)
     private String name;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
+
+    @Column(name = "password_hash")
+    private String passwordHash;
+
+    @Column(name = "email_verified")
+    private boolean emailVerified;
 
     @CreationTimestamp
     @Column(name = "criado_em", updatable = false)

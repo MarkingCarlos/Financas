@@ -1,0 +1,283 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pageHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.pageTitleGroup {}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.totalSavingsText {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 0.125rem;
+}
+
+.totalSavingsAmount {
+  font-weight: 600;
+  color: #059669;
+}
+
+.emptyState {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  padding: 2.5rem;
+  text-align: center;
+  color: #9ca3af;
+}
+
+.emptyStateIcon {
+  margin: 0 auto;
+  margin-bottom: 0.75rem;
+  opacity: 0.3;
+}
+
+.savingsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 640px) {
+  .savingsGrid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .savingsGrid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.savingsCard {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.savingsCardTopRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.savingsCardIdentity {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.savingsCardIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.savingsCardName {
+  font-weight: 600;
+  color: #111827;
+}
+
+.savingsCardActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.editButton {
+  color: #9ca3af;
+  transition: color 150ms;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.editButton:hover { color: #2563eb; }
+
+.deleteButton {
+  color: #9ca3af;
+  transition: color 150ms;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.deleteButton:hover { color: #ef4444; }
+
+.savingsBalance {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.availabilityToggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid;
+  font-size: 0.875rem;
+  transition: color 150ms, background-color 150ms, border-color 150ms;
+  background: none;
+  cursor: pointer;
+}
+
+.availabilityToggleOn {
+  background-color: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+
+.availabilityToggleOff {
+  background-color: #f9fafb;
+  border-color: #e5e7eb;
+  color: #6b7280;
+}
+
+.availabilityToggleLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toggleTrack {
+  width: 2.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  position: relative;
+  transition: background-color 150ms;
+}
+
+.toggleTrackOn {
+  background-color: #10b981;
+}
+
+.toggleTrackOff {
+  background-color: #d1d5db;
+}
+
+.toggleThumb {
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 9999px;
+  background-color: #fff;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.1);
+  transition: transform 150ms;
+}
+
+.toggleThumbOn {
+  transform: translateX(1rem);
+}
+
+.toggleThumbOff {
+  transform: translateX(0);
+}
+
+.savingsButtonRow {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.depositButton {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background-color: #fff;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
+  transition: background-color 150ms;
+}
+.depositButton:hover { background-color: #f9fafb; }
+
+.transferButton {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 150ms;
+}
+.transferButton:hover { background-color: #1d4ed8; }
+.transferButton:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.currentBalanceInfo {
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.balanceLabel {
+  font-weight: 700;
+  color: #111827;
+}
+
+.insufficientWarning {
+  font-size: 0.75rem;
+  color: #ef4444;
+  margin-top: 0.25rem;
+}
+
+.colorPickerRow {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.colorSwatch {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
+  transition: transform 150ms;
+  border: none;
+  cursor: pointer;
+}
+
+.colorSwatchSelected {
+  outline: 2px solid #9ca3af;
+  outline-offset: 2px;
+  transform: scale(1.1);
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}

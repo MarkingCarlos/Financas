@@ -40,6 +40,7 @@ public class SavingsService {
                 .amount(request.amount() != null ? request.amount() : BigDecimal.ZERO)
                 .color(request.color())
                 .icon(request.icon())
+                .available(Boolean.TRUE.equals(request.available()))
                 .build();
         return SavingsDTO.Response.from(savingsRepository.save(savings));
     }
@@ -51,6 +52,7 @@ public class SavingsService {
         if (request.amount() != null) savings.setAmount(request.amount());
         savings.setColor(request.color());
         savings.setIcon(request.icon());
+        if (request.available() != null) savings.setAvailable(request.available());
         return SavingsDTO.Response.from(savingsRepository.save(savings));
     }
 
@@ -94,6 +96,13 @@ public class SavingsService {
         transactionRepository.save(tx);
 
         return SavingsDTO.Response.from(savings);
+    }
+
+    @Transactional
+    public SavingsDTO.Response toggleAvailable(UUID id, String userId) {
+        Savings savings = getOwned(id, userId);
+        savings.setAvailable(!savings.isAvailable());
+        return SavingsDTO.Response.from(savingsRepository.save(savings));
     }
 
     @Transactional

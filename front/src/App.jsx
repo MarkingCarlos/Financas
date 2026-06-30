@@ -4,7 +4,10 @@ import Layout from './components/layout/Layout'
 import Dashboard from './pages/Dashboard'
 import Accounts from './pages/Accounts'
 import CreditCards from './pages/CreditCards'
+import CreditCardTransactions from './pages/CreditCardTransactions'
 import Savings from './pages/Savings'
+import WishList from './pages/WishList'
+import ThirdParty from './pages/ThirdParty'
 import Transactions from './pages/Transactions'
 import Upcoming from './pages/Upcoming'
 import Categories from './pages/Categories'
@@ -12,10 +15,8 @@ import Integrations from './pages/Integrations'
 import Establishments from './pages/Establishments'
 import Login from './pages/Login'
 
-// Guarda de rota: redireciona para /login se não houver token Google
 function RequireAuth({ children }) {
-  const token = localStorage.getItem('google_id_token')
-  // Em dev sem token configurado, deixa passar (backend com security desabilitado)
+  const token = localStorage.getItem('auth_token')
   const securityEnabled = import.meta.env.VITE_SECURITY_ENABLED === 'true'
   if (securityEnabled && !token) {
     return <Navigate to="/login" replace />
@@ -31,7 +32,10 @@ export default function App() {
         <Route index element={<Dashboard />} />
         <Route path="accounts" element={<Accounts />} />
         <Route path="credit-cards" element={<CreditCards />} />
+        <Route path="credit-cards/:id" element={<CreditCardTransactions />} />
         <Route path="savings" element={<Savings />} />
+        <Route path="wishlist" element={<WishList />} />
+        <Route path="third-party" element={<ThirdParty />} />
         <Route path="transactions" element={<Transactions />} />
         <Route path="upcoming" element={<Upcoming />} />
         <Route path="categories" element={<Categories />} />

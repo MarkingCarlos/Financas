@@ -55,6 +55,12 @@ public class SavingsController extends BaseController {
         return service.transfer(id, request, userId(jwt));
     }
 
+    @PatchMapping("/{id}/available")
+    public SavingsDTO.Response toggleAvailable(@PathVariable UUID id,
+                                               @AuthenticationPrincipal Jwt jwt) {
+        return service.toggleAvailable(id, userId(jwt));
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable UUID id, @AuthenticationPrincipal Jwt jwt) {

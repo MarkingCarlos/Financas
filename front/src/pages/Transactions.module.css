@@ -1,0 +1,838 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pageHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.filterBar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+@media (min-width: 640px) {
+  .filterBar {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+  }
+}
+
+.filterButtons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filterButton {
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid;
+  cursor: pointer;
+  transition: color 150ms, background-color 150ms, border-color 150ms;
+}
+@media (min-width: 640px) {
+  .filterButton { padding: 0.375rem 1rem; }
+}
+
+.filterButtonActive {
+  background-color: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+
+.filterButtonInactive {
+  background-color: #fff;
+  color: #4b5563;
+  border-color: #d1d5db;
+}
+.filterButtonInactive:hover { background-color: #f9fafb; }
+
+.searchWrapper {
+  position: relative;
+}
+@media (min-width: 640px) {
+  .searchWrapper { margin-left: auto; }
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.searchInput {
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem 0.375rem 2rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  outline: none;
+  box-sizing: border-box;
+}
+.searchInput:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgb(59 130 246 / 0.2);
+}
+@media (min-width: 640px) {
+  .searchInput { width: 14rem; }
+}
+
+.tableCard {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  overflow: hidden;
+}
+
+/* Mobile */
+.mobileList {
+  display: block;
+}
+@media (min-width: 640px) {
+  .mobileList { display: none; }
+}
+
+.mobileEmptyState {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+.mobileTransactionRow {
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+.mobileTransactionRow + .mobileTransactionRow {
+  border-top: 1px solid #f3f4f6;
+}
+
+.mobileTransactionContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.mobileTransactionNameRow {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.125rem;
+}
+
+.mobileTransactionName {
+  font-weight: 500;
+  color: #111827;
+  font-size: 0.875rem;
+}
+
+.mobileTransactionMeta {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobileTransactionRight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.mobileTransactionAmount {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.mobileTransactionAmountIncome  { color: #16a34a; }
+.mobileTransactionAmountExpense { color: #dc2626; }
+
+.mobileActionButtons {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.mobileEditButton {
+  color: #9ca3af;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color 150ms;
+}
+.mobileEditButton:hover { color: #2563eb; }
+
+.mobileDeleteButton {
+  color: #9ca3af;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color 150ms;
+}
+.mobileDeleteButton:hover { color: #ef4444; }
+
+/* Desktop */
+.desktopTableWrapper {
+  display: none;
+  overflow-x: auto;
+}
+@media (min-width: 640px) {
+  .desktopTableWrapper { display: block; }
+}
+
+.table {
+  width: 100%;
+  font-size: 0.875rem;
+  min-width: 600px;
+  border-collapse: collapse;
+}
+
+.tableHead {
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tableHeadCell {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.tableHeadCellRight {
+  text-align: right;
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.tableBody > tr + tr {
+  border-top: 1px solid #f3f4f6;
+}
+
+.tableRow:hover {
+  background-color: #f9fafb;
+}
+
+.tableRowFuture {
+  opacity: 0.6;
+}
+
+.tableEmptyCell {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: #9ca3af;
+}
+
+.descriptionCell {
+  padding: 0.75rem 1rem;
+}
+
+.descriptionCellContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.descriptionNameRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.descriptionName {
+  font-weight: 500;
+  color: #111827;
+}
+
+.badgeSubscription {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  background-color: #f3e8ff;
+  color: #7e22ce;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color 150ms;
+}
+.badgeSubscription:hover { background-color: #e9d5ff; }
+
+.badgeInstallment {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  background-color: #dbeafe;
+  color: #1d4ed8;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color 150ms;
+}
+.badgeInstallment:hover { background-color: #bfdbfe; }
+
+.badgeSubscriptionMobile {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.375rem;
+  border-radius: 9999px;
+  background-color: #f3e8ff;
+  color: #7e22ce;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+}
+
+.badgeInstallmentMobile {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.375rem;
+  border-radius: 9999px;
+  background-color: #dbeafe;
+  color: #1d4ed8;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+}
+
+.badgeThirdParty {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  background-color: #fef3c7;
+  color: #b45309;
+  font-weight: 500;
+}
+
+.badgeThirdPartyMobile {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  font-size: 0.75rem;
+  padding: 0.125rem 0.375rem;
+  border-radius: 9999px;
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.transactionNotes {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 20rem;
+}
+
+.categoryCell {
+  padding: 0.75rem 1rem;
+}
+
+.categoryChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.categoryEmpty {
+  color: #9ca3af;
+}
+
+.accountCell {
+  padding: 0.75rem 1rem;
+}
+
+.accountCellContent {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: #6b7280;
+}
+
+.dateCell {
+  padding: 0.75rem 1rem;
+  color: #6b7280;
+}
+
+.amountCell {
+  padding: 0.75rem 1rem;
+  text-align: right;
+  font-weight: 600;
+}
+
+.amountIncome  { color: #16a34a; }
+.amountExpense { color: #dc2626; }
+
+.actionsCell {
+  padding: 0.75rem 1rem;
+}
+
+.actionButtonsRow {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.editButton {
+  color: #9ca3af;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 150ms;
+}
+.editButton:hover { color: #2563eb; }
+
+.deleteButton {
+  color: #9ca3af;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 150ms;
+}
+.deleteButton:hover { color: #ef4444; }
+
+.paginationRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.paginationLabel {
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+/* Formulário */
+.transactionTypeToggle {
+  display: flex;
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5db;
+  overflow: hidden;
+}
+
+.typeButtonExpense {
+  flex: 1;
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 150ms, background-color 150ms;
+  border: none;
+  cursor: pointer;
+}
+
+.typeButtonExpenseActive   { background-color: #ef4444; color: #fff; }
+.typeButtonExpenseInactive { background-color: #fff; color: #4b5563; }
+.typeButtonExpenseInactive:hover { background-color: #f9fafb; }
+
+.typeButtonIncome {
+  flex: 1;
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 150ms, background-color 150ms;
+  border: none;
+  cursor: pointer;
+}
+
+.typeButtonIncomeActive   { background-color: #22c55e; color: #fff; }
+.typeButtonIncomeInactive { background-color: #fff; color: #4b5563; }
+.typeButtonIncomeInactive:hover { background-color: #f9fafb; }
+
+.suggestionDropdown {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  margin-top: 0.25rem;
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  max-height: 12rem;
+  overflow-y: auto;
+}
+
+.suggestionItem {
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 150ms;
+}
+.suggestionItem:hover { background-color: #f9fafb; }
+
+.installmentSection {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding: 0.75rem;
+  background-color: #eff6ff;
+  border-radius: 0.5rem;
+}
+
+.installmentNote {
+  grid-column: span 2;
+  font-size: 0.75rem;
+  color: #2563eb;
+}
+
+.subscriptionNote {
+  font-size: 0.75rem;
+  color: #9333ea;
+  margin-top: 0.25rem;
+}
+
+.recurrenceRow {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.recurrenceButton {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid;
+  cursor: pointer;
+  transition: color 150ms, background-color 150ms, border-color 150ms;
+}
+
+.recurrenceButtonActive {
+  background-color: #059669;
+  color: #fff;
+  border-color: #059669;
+}
+
+.recurrenceButtonInactive {
+  background-color: #fff;
+  color: #4b5563;
+  border-color: #d1d5db;
+}
+.recurrenceButtonInactive:hover { background-color: #f9fafb; }
+
+.thirdPartySection {
+  border-radius: 0.5rem;
+  border: 1px solid;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: background-color 150ms, border-color 150ms;
+}
+
+.thirdPartySectionActive   { border-color: #fcd34d; background-color: #fffbeb; }
+.thirdPartySectionInactive { border-color: #e5e7eb; }
+
+.thirdPartyToggleLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.thirdPartyToggleTrack {
+  width: 2.5rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  transition: background-color 150ms;
+  position: relative;
+}
+
+.thirdPartyToggleTrackOn  { background-color: #f59e0b; }
+.thirdPartyToggleTrackOff { background-color: #d1d5db; }
+
+.thirdPartyToggleThumb {
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 9999px;
+  background-color: #fff;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.1);
+  transition: transform 150ms;
+}
+
+.thirdPartyToggleThumbOn  { transform: translateX(1.25rem); }
+.thirdPartyToggleThumbOff { transform: translateX(0); }
+
+.thirdPartyToggleName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.thirdPartyFields {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  padding-top: 0.25rem;
+}
+
+.thirdPartyFieldFull {
+  grid-column: span 2;
+}
+
+.thirdPartyExcessNote  { font-size: 0.75rem; color: #059669; margin-top: 0.25rem; }
+.thirdPartyPartNote    { font-size: 0.75rem; color: #d97706; margin-top: 0.25rem; }
+.thirdPartyNeutralNote { font-size: 0.75rem; color: #9ca3af; margin-top: 0.25rem; }
+
+.accountCardRow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+/* Modal detalhe grupo */
+.groupDetailBadgeRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.badgeGroupInstallment {
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  background-color: #dbeafe;
+  color: #1d4ed8;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badgeGroupSubscription {
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  background-color: #f3e8ff;
+  color: #7e22ce;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.groupDetailCCBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: #9333ea;
+}
+
+.groupDetailAccountBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: #2563eb;
+}
+
+.groupDetailTableWrapper {
+  overflow-x: auto;
+  max-height: 24rem;
+  overflow-y: auto;
+}
+
+.groupDetailTable {
+  width: 100%;
+  font-size: 0.875rem;
+  border-collapse: collapse;
+}
+
+.groupDetailTableHead {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.groupDetailTableHeadCell {
+  padding-bottom: 0.5rem;
+  padding-right: 1rem;
+  font-weight: 500;
+  text-align: left;
+  color: #6b7280;
+}
+
+.groupDetailTableBody > tr + tr {
+  border-top: 1px solid #f3f4f6;
+}
+
+.groupDetailInstallmentCell {
+  padding: 0.625rem 1rem 0.625rem 0;
+  color: #6b7280;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.groupDetailDateCell {
+  padding: 0.625rem 1rem 0.625rem 0;
+  color: #374151;
+}
+
+.groupDetailAmountCell {
+  padding: 0.625rem 1rem 0.625rem 0;
+  font-weight: 600;
+  color: #dc2626;
+}
+
+.groupDetailStatusCell {
+  padding: 0.625rem 0;
+}
+
+.statusBadge {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+/* Seleção múltipla */
+.bulkActionBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 0.5rem;
+}
+
+.bulkActionInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1e40af;
+}
+
+.bulkActionCount {
+  background-color: #2563eb;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+}
+
+.bulkActionButtons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bulkClearButton {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: #2563eb;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 150ms;
+}
+.bulkClearButton:hover { color: #1e40af; }
+
+.bulkDeleteButton {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+  background-color: #dc2626;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color 150ms;
+}
+.bulkDeleteButton:hover { background-color: #b91c1c; }
+.bulkDeleteButton:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.checkboxCellHeader {
+  padding-left: 1rem;
+  padding-right: 0.5rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  width: 2.5rem;
+}
+
+.checkboxCell {
+  padding-left: 1rem;
+  padding-right: 0.5rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.checkboxInput {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.25rem;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
+  accent-color: #2563eb;
+}
+
+.tableRowSelected {
+  background-color: #eff6ff;
+}
+.tableRowSelected:hover {
+  background-color: #dbeafe;
+}
+
+.mobileCheckboxWrapper {
+  display: flex;
+  align-items: center;
+  padding-left: 0;
+  flex-shrink: 0;
+}

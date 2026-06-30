@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -84,4 +85,54 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
     /** Lista de receitas pendentes (accountId nulo = ainda não recebidas em nenhuma conta) */
     @Query("SELECT t FROM Transaction t WHERE t.userId = :userId AND t.type = 'INCOME' AND t.accountId IS NULL ORDER BY t.date ASC")
     List<Transaction> findPendingIncome(UUID userId);
+
+    @Query("SELECT COALESCE(SUM(t.amount), 0) FROM Transaction t WHERE t.faturaId = :faturaId AND t.type = 'EXPENSE'")
+    BigDecimal sumExpensesByFaturaId(@Param("faturaId") UUID faturaId);
+
+    @Query("SELECT COALESCE(SUM(t.amount), 0) FROM Transaction t " +
+           "WHERE t.creditCardId = :creditCardId AND t.type = 'EXPENSE' " +
+           "AND t.date >= :startDate AND t.date < :endDate")
+    BigDecimal sumExpensesByCreditCardAndDateRange(@Param("creditCardId") UUID creditCardId,
+                                                   @Param("startDate") LocalDate startDate,
+                                                   @Param("endDate") LocalDate endDate);
+
+    @Query("SELECT COALESCE(SUM(t.amount), 0) FROM Transaction t " +
+           "WHERE t.creditCardId = :creditCardId AND t.type = 'EXPENSE' " +
+           "AND t.recurrenceType <> 'SUBSCRIPTION' " +
+           "AND t.date >= :startDate AND t.date < :endDate")
+    BigDecimal sumNonSubscriptionExpensesByCreditCardAndDateRange(@Param("creditCardId") UUID creditCardId,
+                                                                  @Param("startDate") LocalDate startDate,
+                                                                  @Param("endDate") LocalDate endDate);
+
+    List<Transaction> findByUserIdAndThirdPartyTrueOrderByDateAsc(UUID userId);
+
+    /** Soma do valor coberto por terceiros no período: min(amount, thirdPartyAmount) por transação */
+    @Query("""
+            SELECT COALESCE(SUM(
+                CASE WHEN t.thirdPartyAmount <= t.amount THEN t.thirdPartyAmount ELSE t.amount END
+            ), 0)
+            FROM Transaction t
+            WHERE t.userId = :userId
+              AND t.type = 'EXPENSE'
+              AND t.thirdParty = true
+              AND t.thirdPartyAmount IS NOT NULL
+              AND t.date BETWEEN :from AND :to
+            """)
+    BigDecimal sumThirdPartyCoveredByPeriod(@Param("userId") UUID userId,
+                                            @Param("from") LocalDate from,
+                                            @Param("to") LocalDate to);
+
+    /**
+     * Totais mensais de receitas e despesas no período (uma linha por mês/tipo).
+     * Usado pelo detector de inflação de estilo de vida para analisar tendências.
+     */
+    @Query("""
+            SELECT YEAR(t.date), MONTH(t.date), t.type, SUM(t.amount)
+            FROM Transaction t
+            WHERE t.userId = :userId
+              AND t.date BETWEEN :from AND :to
+            GROUP BY YEAR(t.date), MONTH(t.date), t.type
+            ORDER BY YEAR(t.date), MONTH(t.date)
+            """)
+    List<Object[]> sumMonthlyTotalsByType(UUID userId, LocalDate from, LocalDate to);
 }

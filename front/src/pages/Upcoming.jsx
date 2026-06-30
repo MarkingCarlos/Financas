@@ -1,22 +1,17 @@
 import { useEffect, useState } from 'react'
 import { transactionService } from '../services/transactionService'
 import { CalendarClock, ChevronDown, ChevronRight, RefreshCw, Ban } from 'lucide-react'
+import styles from './Upcoming.module.css'
 
 function formatCurrency(v) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v ?? 0)
 }
 
-function recurrenceLabel(t) {
-  if (t.recurrenceType === 'SUBSCRIPTION') return 'Assinatura'
-  if (t.recurrenceType === 'INSTALLMENT') return `${t.installmentNumber}/${t.installmentTotal}`
-  return null
-}
-
 function recurrenceBadge(t) {
   if (t.recurrenceType === 'SUBSCRIPTION')
-    return <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">Assinatura</span>
+    return <span className={styles.badgeSubscription}>Assinatura</span>
   if (t.recurrenceType === 'INSTALLMENT')
-    return <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
+    return <span className={styles.badgeInstallment}>
       Parcela {t.installmentNumber}/{t.installmentTotal}
     </span>
   return null
@@ -32,7 +27,6 @@ export default function Upcoming() {
     setLoading(true)
     transactionService.upcoming().then(data => {
       setMonths(data)
-      // Expande o primeiro mês por padrão
       if (data.length > 0) {
         setExpanded({ [`${data[0].year}-${data[0].month}`]: true })
       }
@@ -59,13 +53,13 @@ export default function Upcoming() {
   if (loading) return <p className="text-gray-500">Carregando...</p>
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Próximos Meses</h1>
-          <p className="text-sm text-gray-500 mt-0.5">
+    <div className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <div className={styles.pageTitleGroup}>
+          <h1 className={styles.pageTitle}>Próximos Meses</h1>
+          <p className={styles.pageSubtitle}>
             Despesas previstas nos próximos 6 meses
-            {total > 0 && <> · Total: <span className="font-semibold text-red-600">{formatCurrency(total)}</span></>}
+            {total > 0 && <> · Total: <span className={styles.totalHighlight}>{formatCurrency(total)}</span></>}
           </p>
         </div>
         <button onClick={load} className="btn-secondary">
@@ -74,63 +68,60 @@ export default function Upcoming() {
       </div>
 
       {months.length === 0 ? (
-        <div className="card p-10 text-center text-gray-400">
-          <CalendarClock size={40} className="mx-auto mb-3 opacity-30" />
+        <div className={styles.emptyState}>
+          <CalendarClock size={40} className={styles.emptyStateIcon} />
           <p>Nenhuma despesa futura registrada.</p>
-          <p className="text-xs mt-1">Assinaturas e parcelas aparecerão aqui automaticamente.</p>
+          <p className={styles.emptyStateSubtext}>Assinaturas e parcelas aparecerão aqui automaticamente.</p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className={styles.monthList}>
           {months.map(m => {
             const key = `${m.year}-${m.month}`
             const open = !!expanded[key]
             return (
-              <div key={key} className="card overflow-hidden">
-                {/* Header do mês */}
-                <button
-                  onClick={() => toggleMonth(key)}
-                  className="w-full flex items-center justify-between px-5 py-4 hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    {open ? <ChevronDown size={18} className="text-gray-400" /> : <ChevronRight size={18} className="text-gray-400" />}
-                    <span className="font-semibold text-gray-900 capitalize">{m.monthLabel}</span>
-                    <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
+              <div key={key} className={styles.monthCard}>
+                <button onClick={() => toggleMonth(key)} className={styles.monthHeader}>
+                  <div className={styles.monthHeaderLeft}>
+                    {open
+                      ? <ChevronDown size={18} className={styles.monthChevron} />
+                      : <ChevronRight size={18} className={styles.monthChevron} />}
+                    <span className={styles.monthName}>{m.monthLabel}</span>
+                    <span className={styles.monthTransactionCount}>
                       {m.transactions.length} {m.transactions.length === 1 ? 'despesa' : 'despesas'}
                     </span>
                   </div>
-                  <span className="font-bold text-red-600 text-lg">{formatCurrency(m.totalExpenses)}</span>
+                  <span className={styles.monthTotal}>{formatCurrency(m.totalExpenses)}</span>
                 </button>
 
-                {/* Lista de transações */}
                 {open && (
-                  <div className="border-t border-gray-100 divide-y divide-gray-50">
+                  <div className={styles.transactionList}>
                     {m.transactions.map(t => (
-                      <div key={t.id} className="flex items-center justify-between px-5 py-3 hover:bg-gray-50">
-                        <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div key={t.id} className={styles.transactionRow}>
+                        <div className={styles.transactionLeft}>
                           <span
-                            className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                            className={styles.categoryDot}
                             style={{ background: t.categoryColor ?? '#94a3b8' }}
                           />
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <p className="text-sm font-medium text-gray-800 truncate">{t.description}</p>
+                          <div className={styles.transactionDetails}>
+                            <div className={styles.transactionNameRow}>
+                              <p className={styles.transactionName}>{t.description}</p>
                               {recurrenceBadge(t)}
                             </div>
-                            <p className="text-xs text-gray-400">
+                            <p className={styles.transactionMeta}>
                               {new Date(t.date + 'T12:00:00').toLocaleDateString('pt-BR')}
                               {t.categoryName && ` · ${t.categoryName}`}
                               {(t.creditCardName || t.accountName) && ` · ${t.creditCardName ?? t.accountName}`}
                             </p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-3 ml-3 flex-shrink-0">
-                          <span className="text-sm font-semibold text-red-600">{formatCurrency(t.amount)}</span>
+                        <div className={styles.transactionRight}>
+                          <span className={styles.transactionAmount}>{formatCurrency(t.amount)}</span>
                           {(t.recurrenceType === 'SUBSCRIPTION' || t.recurrenceType === 'INSTALLMENT') && t.recurrenceGroupId && (
                             <button
                               title="Cancelar futuras ocorrências"
                               onClick={() => handleCancelGroup(t.recurrenceGroupId, t.description)}
                               disabled={canceling === t.recurrenceGroupId}
-                              className="text-gray-300 hover:text-red-500 transition-colors disabled:opacity-50"
+                              className={styles.cancelGroupButton}
                             >
                               <Ban size={15} />
                             </button>

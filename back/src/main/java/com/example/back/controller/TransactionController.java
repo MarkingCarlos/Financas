@@ -2,7 +2,9 @@ package com.example.back.controller;
 
 import com.example.back.domain.TransactionType;
 import com.example.back.dto.DashboardDTO;
+import com.example.back.dto.LifestyleInflationDTO;
 import com.example.back.dto.SpendingCapacityDTO;
+import com.example.back.dto.ThirdPartyDTO;
 import com.example.back.dto.TransactionDTO;
 import com.example.back.service.TransactionService;
 import jakarta.validation.Valid;
@@ -106,8 +108,14 @@ public class TransactionController extends BaseController {
     }
 
     @GetMapping("/dashboard")
-    public DashboardDTO dashboard(@AuthenticationPrincipal Jwt jwt) {
-        return service.getDashboard(userId(jwt));
+    public DashboardDTO dashboard(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer month) {
+        LocalDate now = LocalDate.now();
+        int y = year != null ? year : now.getYear();
+        int m = month != null ? month : now.getMonthValue();
+        return service.getDashboard(userId(jwt), y, m);
     }
 
     /**
@@ -117,6 +125,22 @@ public class TransactionController extends BaseController {
     @GetMapping("/spending-capacity")
     public SpendingCapacityDTO spendingCapacity(@AuthenticationPrincipal Jwt jwt) {
         return service.getSpendingCapacity(userId(jwt));
+    }
+
+    /**
+     * Detector de inflação de estilo de vida:
+     * compara o crescimento dos gastos com o crescimento da renda
+     * nos últimos meses completos (mês corrente fica de fora).
+     */
+    @GetMapping("/lifestyle-inflation")
+    public LifestyleInflationDTO lifestyleInflation(@AuthenticationPrincipal Jwt jwt) {
+        return service.getLifestyleInflation(userId(jwt));
+    }
+
+    /** Lista todas as compras feitas para terceiros, com resumo de parcelas e repasses. */
+    @GetMapping("/third-party")
+    public List<ThirdPartyDTO> thirdPartyPurchases(@AuthenticationPrincipal Jwt jwt) {
+        return service.getThirdPartyPurchases(userId(jwt));
     }
 
     /**

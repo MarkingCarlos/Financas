@@ -38,6 +38,10 @@ public class Savings {
     @Column(name = "icone")
     private String icon;
 
+    @Column(name = "disponivel", nullable = false)
+    @Builder.Default
+    private boolean available = false;
+
     @CreationTimestamp
     @Column(name = "criado_em", updatable = false)
     private LocalDateTime createdAt;
