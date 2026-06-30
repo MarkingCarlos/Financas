@@ -44,11 +44,13 @@ function CardForm({ initial, onSubmit, onCancel, loading }) {
         <label className="label">Nome do cartão *</label>
         <input className="input" required value={form.name} onChange={e => set('name', e.target.value)} />
       </div>
-      <div>
-        <label className="label">Fatura atual</label>
-        <input className="input" type="number" step="0.01" value={form.currentBalance}
-          onChange={e => set('currentBalance', e.target.value)} />
-      </div>
+      {initial && (
+        <div>
+          <label className="label">Fatura atual</label>
+          <input className="input" type="number" step="0.01" value={form.currentBalance}
+            onChange={e => set('currentBalance', e.target.value)} />
+        </div>
+      )}
       {!initial && (
         <div>
           <label className="label">Mês da fatura inicial *</label>

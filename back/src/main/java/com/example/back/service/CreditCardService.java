@@ -4,6 +4,7 @@ import com.example.back.domain.CreditCard;
 import com.example.back.dto.CreditCardDTO;
 import com.example.back.exception.ResourceNotFoundException;
 import com.example.back.repository.CreditCardRepository;
+import com.example.back.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ public class CreditCardService {
 
     private final CreditCardRepository repository;
     private final BillService billService;
+    private final TransactionRepository transactionRepository;
 
     public List<CreditCardDTO.Response> findAll(String userId) {
         return repository.findByUserIdOrderByNameAsc(userId)
@@ -44,7 +46,7 @@ public class CreditCardService {
                 .color(request.color())
                 .build();
         card = repository.save(card);
-        billService.getOrCreateBill(card.getId(), request.billMonth(), request.billYear());
+        billService.createInitialOpenBill(card.getId(), request.billMonth(), request.billYear());
         return toResponse(card);
     }
 
@@ -62,7 +64,10 @@ public class CreditCardService {
 
     @Transactional
     public void delete(UUID id, String userId) {
-        repository.delete(getOwnedCard(id, userId));
+        CreditCard card = getOwnedCard(id, userId);
+        transactionRepository.deleteByCreditCardId(card.getId());
+        billService.deleteBillsForCard(card.getId());
+        repository.delete(card);
     }
 
     public CreditCard getOwnedCard(UUID id, String userId) {

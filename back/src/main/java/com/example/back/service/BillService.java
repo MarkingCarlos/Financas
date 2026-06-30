@@ -147,6 +147,18 @@ public class BillService {
                 });
     }
 
+    @Transactional
+    public void deleteBillsForCard(UUID cardId) {
+        billRepository.deleteByCreditCardId(cardId);
+    }
+
+    @Transactional
+    public Bill createInitialOpenBill(UUID cardId, int mes, int ano) {
+        return billRepository.findByCreditCardIdAndMesAndAno(cardId, mes, ano)
+                .orElseGet(() -> billRepository.save(
+                        Bill.builder().creditCardId(cardId).mes(mes).ano(ano).status(BillStatus.ABERTA).build()));
+    }
+
     private BillDTO.Response toResponse(Bill bill) {
         LocalDate startDate = LocalDate.of(bill.getAno(), bill.getMes(), 1);
         LocalDate endDate = startDate.plusMonths(1);

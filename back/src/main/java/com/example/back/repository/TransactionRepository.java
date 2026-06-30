@@ -106,6 +106,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
 
     List<Transaction> findByUserIdAndThirdPartyTrueOrderByDateAsc(UUID userId);
 
+    void deleteByCreditCardId(UUID creditCardId);
+
     /** Soma do valor coberto por terceiros no período: min(amount, thirdPartyAmount) por transação */
     @Query("""
             SELECT COALESCE(SUM(

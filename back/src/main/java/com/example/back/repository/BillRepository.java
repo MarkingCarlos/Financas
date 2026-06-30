@@ -17,4 +17,6 @@ public interface BillRepository extends JpaRepository<Bill, UUID> {
     Optional<Bill> findByCreditCardIdAndMesAndAno(UUID creditCardId, int mes, int ano);
 
     List<Bill> findByCreditCardIdAndStatusOrderByAnoAscMesAsc(UUID creditCardId, BillStatus status);
+
+    void deleteByCreditCardId(UUID creditCardId);
 }
